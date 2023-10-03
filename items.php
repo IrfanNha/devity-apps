@@ -12,8 +12,8 @@ require 'vendor/autoload.php';
 require 'config/Config.php';
 include 'components/templates/header.php'; ?>
 <style>
-  /* Mengubah semua input dengan id "item_id" menjadi huruf besar (uppercase) */
-  #item_id {
+  /* Mengubah semua input dengan id "item_code" menjadi huruf besar (uppercase) */
+  #item_code {
     text-transform: uppercase;
   }
 </style>
@@ -27,29 +27,29 @@ $conn = $database->getConnection();
 // Handle Create (Add) operation
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create'])) {
   $item_name = $_POST['item_name'];
-  $item_id = strtoupper($_POST['item_id']);
+  $item_code = strtoupper($_POST['item_code']);
   $price = $_POST['price']; // Ambil harga dari input form
   $user_id = $_SESSION['user_id'];
 
   // Validate and sanitize user input
   // Perform appropriate validation and sanitization here
 
-  // Check if the item_id already exists in the database
-  $check_query = "SELECT id FROM items WHERE item_id = :item_id AND user_id = :user_id";
+  // Check if the item_code already exists in the database
+  $check_query = "SELECT id FROM items WHERE item_code = :item_code AND user_id = :user_id";
   $stmt_check = $conn->prepare($check_query);
-  $stmt_check->bindParam(':item_id', $item_id);
+  $stmt_check->bindParam(':item_code', $item_code);
   $stmt_check->bindParam(':user_id', $user_id);
   $stmt_check->execute();
 
   if ($stmt_check->rowCount() > 0) {
-    // Item with the same item_id already exists, handle the error
-    echo "Item with the same item_id already exists.";
+    // Item with the same item_code already exists, handle the error
+    echo "Item with the same item_code already exists.";
   } else {
     // Insert item into the database
-    $insert_query = "INSERT INTO items (item_name, item_id, user_id, price) VALUES (:item_name, :item_id, :user_id, :price)";
+    $insert_query = "INSERT INTO items (item_name, item_code, user_id, price) VALUES (:item_name, :item_code, :user_id, :price)";
     $stmt = $conn->prepare($insert_query);
     $stmt->bindParam(':item_name', $item_name);
-    $stmt->bindParam(':item_id', $item_id);
+    $stmt->bindParam(':item_code', $item_code);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->bindParam(':price', $price); // Bind parameter harga
 
@@ -109,7 +109,7 @@ if (isset($_GET['delete'])) {
 }
 
 // Handle Read (List) operation
-$query = "SELECT id, item_name, item_id, price, created_at FROM items WHERE user_id = :user_id";
+$query = "SELECT id, item_name, item_code, price, created_at FROM items WHERE user_id = :user_id";
 $stmt = $conn->prepare($query);
 $user_id = $_SESSION['user_id'];
 $stmt->bindParam(':user_id', $user_id);
@@ -123,6 +123,7 @@ $row_count = 0;
   <button type="button" class="btn btn-dark rounded-5 mt-3" data-bs-toggle="modal" data-bs-target="#addItemModal">
     Add Item
   </button>
+  <!-- Modal for adding a new item -->
   <!-- Modal for adding a new item -->
   <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -140,22 +141,38 @@ $row_count = 0;
               <input type="text" class="form-control" id="item_name" name="item_name" required>
             </div>
             <div class="mb-3">
-              <label for="item_id" class="form-label">Item ID</label>
-              <input type="text" class="form-control" id="item_id" name="item_id" minlength="10" maxlength="10" required>
+              <label for="item_code" class="form-label">Item CODE</label>
+              <input type="text" class="form-control mb-3" id="item_code" name="item_code" minlength="10" maxlength="10" required>
+              <button type="button" class="btn btn-secondary" id="generateItemCode">Generate Item Code</button>
             </div>
+            <!-- Button to generate item code -->
             <div class="mb-3">
               <label for="price" class="form-label">Price</label>
               <input type="text" class="form-control" id="price" name="price" required>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary  rounded-5" data-bs-dismiss="modal">Close</button>
-              <button type="submit" name="create" class="btn btn-primary  rounded-5">Add Item</button>
+              <button type="button" class="btn btn-secondary rounded-5" data-bs-dismiss="modal">Close</button>
+              <button type="submit" name="create" class="btn btn-primary rounded-5">Add Item</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Function to generate item code based on item name
+    document.getElementById('generateItemCode').addEventListener('click', function() {
+      const itemName = document.getElementById('item_name').value.trim();
+      if (itemName.length >= 3) {
+        const generatedCode = itemName.substring(0, 3).toUpperCase() + Math.floor(1000000 + Math.random() * 9000000);
+        document.getElementById('item_code').value = generatedCode;
+      } else {
+        alert('Item name minimal 3 karakter');
+      }
+    });
+  </script>
+
 
 
   <div class="card my-5">
@@ -181,8 +198,8 @@ $row_count = 0;
             <tr>
               <td><?php echo ++$row_count ?></td>
               <td><?php echo $item['item_name']; ?></td>
-              <td><?php echo $item['item_id']; ?></td>
-              <td><?php echo $item['price']; ?></td> <!-- Tampilkan harga -->
+              <td><?php echo $item['item_code']; ?></td>
+              <td>Rp. <?php echo number_format($item['price'], 0, ',', '.'); ?></td>
               <td>
                 <div class="d-md-block d-none"><?php echo $item['created_at']; ?> </div>
               </td>

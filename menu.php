@@ -119,6 +119,9 @@ $pages = 'Menu';
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="resetKeranjang">Reset</button>
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiPesanan">Konfirmasi</button>
+                    <button type="button" class="btn btn-success" onclick="cetakStruk()">Cetak Struk</button>
+                    <!-- Button to save the order (customize as needed) -->
+                    <button type="button" class="btn btn-primary" id="simpanBtn">Simpan</button>
                 </div>
             </div>
         </div>
@@ -138,9 +141,7 @@ $pages = 'Menu';
                 <div class="modal-footer">
                     <!-- Button to print the receipt -->
                     <!-- Button to print the receipt -->
-                    <button type="button" class="btn btn-success" onclick="cetakStruk()">Cetak Struk</button>
-                    <!-- Button to save the order (customize as needed) -->
-                    <button type="button" class="btn btn-primary" id="simpanBtn">Simpan</button>
+
                 </div>
             </div>
         </div>
@@ -226,7 +227,6 @@ $pages = 'Menu';
         $('#totalHarga').text('Rp. ' + totalHarga);
     }
 
-
     // Fungsi untuk mengurangi item
     function kurangiItem(nama, harga) {
         // Find the item in the cart
@@ -255,7 +255,6 @@ $pages = 'Menu';
             updateKeranjang();
         }
     }
-
 
     // Fungsi untuk mereset keranjang
     function resetKeranjang() {
@@ -343,56 +342,57 @@ $pages = 'Menu';
     // Event listener for the "Konfirmasi" button
     document.getElementById("konfirmasiButton").addEventListener("click", function() {
         $('#konfirmasiModal').modal('hide'); // Close the current modal
-        $('#modalKonfirmasiPesanan').modal('show'); // Show the new modal
+        $('#mdlProfileUser').modal('show'); // Show the new modal
     });
 
     // Event listener for the "Cetak Struk" button inside the modal
     document.getElementById("cetakStrukBtn").addEventListener("click", function() {
         cetakStruk(); // Call the cetakStruk function when the "Cetak Struk" button is clicked
-        $('#konfirmasiModal').modal('hide'); // Close the modal
+        $('#mdlProfileUser').modal('hide'); // Close the modal
     });
 
-    
-    document.getElementById("simpanBtn").addEventListener("click", function() {
-    // Create an object to store the order data
-    const orderData = {
-        keranjang,
-        totalHarga
-    };
+    // Event listener for the "Simpan" button inside the modal
+    $("#simpanBtn").on("click", function() {
+        // Create an object to store the order data
+        const orderData = {
+            keranjang,
+            totalHarga
+        };
 
-    // Make an AJAX request to save the order
-    $.ajax({
-        type: "POST",
-        url: "save_order.php", // Ensure the correct path
-        contentType: "application/json",
-        data: JSON.stringify(orderData),
-        success: function(response) {
-            // Handle the server's response here
-            console.log(response);
+        // Make an AJAX request to save the order
+        $.ajax({
+            type: "POST",
+            url: "save_order.php", // Ensure the correct path
+            contentType: "application/json",
+            data: JSON.stringify(orderData),
+            success: function(response) {
+                // Handle the server's response here
+                console.log(response);
 
-            // Check if the response is successful before closing the modal
-            if (response.status === "success") {
-                // Close the modal
-                $('#modalKonfirmasiPesanan').modal('hide');
+                // Check if the response is successful before closing the modal
+                if (response.status === "success") {
+                    // Close the modal
+                    $('#mdlProfileUser').modal('hide');
 
-                // Reset the cart after saving
-                resetKeranjang();
+                    // Reset the cart after saving
+                    resetKeranjang();
 
-                // Optionally, perform any other actions after successful save
-            } else {
-                // Handle the case where the save was not successful
-                console.error("Error saving order: " + response.message);
+                    // Optionally, perform any other actions after successful save
+                } else {
+                    // Handle the case where the save was not successful
+                    console.error("Error saving order: " + response.message);
+                    // Optionally, show an error message to the user
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle errors here
+                console.error("Error saving order: " + error);
                 // Optionally, show an error message to the user
             }
-        },
-        error: function(xhr, status, error) {
-            // Handle errors here
-            console.error("Error saving order: " + error);
-            // Optionally, show an error message to the user
-        }
+        });
     });
-});
 </script>
+
 
 <!-- Content -->
 <?php include 'components/partials/dashboard.footer.php' ?>

@@ -18,7 +18,7 @@ $database = new Database();
 $conn = $database->getConnection();
 
 // Fetch existing items from the database
-$itemQuery = "SELECT id, item_name FROM items WHERE user_id = :user_id";
+$itemQuery = "SELECT id, item_code, item_name FROM items WHERE user_id = :user_id";
 $itemStmt = $conn->prepare($itemQuery);
 $itemStmt->bindParam(':user_id', $_SESSION['user_id']);
 $itemStmt->execute();
@@ -192,7 +192,7 @@ if (isset($_SESSION['stock_error'])) {
         foreach ($stok_items as $stok_item) : ?>
           <tr>
             <td><?php echo ++$row_count ?></td>
-            <td><?php echo $stok_item['item_id']; ?></td>
+            <td><?php echo $stok_item['item_code']; ?></td>
             <td><?php echo $stok_item['item_name']; ?></td>
             <td class="fw-bold"><?php echo $stok_item['total_items_qty']; ?></td>
           </tr>

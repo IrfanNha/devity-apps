@@ -1,42 +1,50 @@
 <?php
 session_start();
 
-// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: auth/login.php");
     exit;
 }
 
-// Include necessary files and initialize the database connection
-require 'vendor/autoload.php';
-require 'config/Config.php';
-require 'config/Database.php';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Include the Database class and create a database connection
+    require 'config/Database.php';
+    $database = new Database();
+    $conn = $database->getConnection();
 
-// Get user ID from session
-$userId = $_SESSION["user_id"];
+    // Retrieve the user ID from the session
+    $user_id = $_SESSION['user_id'];
 
-// Get the order data from the POST request
-$orderData = json_decode(file_get_contents("php://input"), true);
+    // Retrieve the order data from the POST request
+    $orderData = json_decode(file_get_contents("php://input"));
 
-// Initialize the database connection
-$database = new Database();
-$conn = $database->getConnection();
+    // Insert the order data into the database
+    $insertOrderQuery = "INSERT INTO orders (user_id, total_price) VALUES (:user_id, :total_price)";
+    $stmt = $conn->prepare($insertOrderQuery);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindParam(':total_price', $orderData->totalHarga);
 
-// Prepare the SQL statement to insert the order into the riwayat_order table
-$sql = "INSERT INTO riwayat_order (data, user_id) VALUES (:data, :user_id)";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(":data", json_encode($orderData), PDO::PARAM_STR);
-$stmt->bindParam(":user_id", $userId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        $orderId = $conn->lastInsertId(); // Get the ID of the inserted order
 
-// Execute the statement
-if ($stmt->execute()) {
-    // Return a success response if the insertion is successful
-    echo json_encode(["status" => "success", "message" => "Order saved successfully."]);
+        // Insert individual order items into another table
+        foreach ($orderData->keranjang as $item) {
+            $insertOrderItemQuery = "INSERT INTO order_items (order_id, item_name, item_price, quantity) VALUES (:order_id, :item_name, :item_price, :quantity)";
+            $stmtOrderItem = $conn->prepare($insertOrderItemQuery);
+            $stmtOrderItem->bindParam(':order_id', $orderId);
+            $stmtOrderItem->bindParam(':item_name', $item->nama);
+            $stmtOrderItem->bindParam(':item_price', $item->harga);
+            $stmtOrderItem->bindParam(':quantity', $item->quantity);
+            $stmtOrderItem->execute();
+        }
+
+        // Return a success response
+        echo json_encode(["status" => "success", "message" => "Order saved successfully"]);
+    } else {
+        // Return an error response
+        echo json_encode(["status" => "error", "message" => "Failed to save order"]);
+    }
 } else {
-    // Return an error response if there's an issue with the insertion
-    echo json_encode(["status" => "error", "message" => "Error saving order."]);
+    // Return an error response if the request method is not POST
+    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
 }
-
-// Close the database connection
-$conn = null;
-?>
