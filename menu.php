@@ -276,52 +276,159 @@ $pages = 'Menu';
         resetKeranjang(); // Memanggil fungsi resetKeranjang saat tombol "Reset" ditekan
     });
 
-    // Fungsi untuk mencetak struk
+    // <!-- Fungsi untuk mencetak struk -->
     function cetakStruk() {
         // Buka jendela cetak
         var printWindow = window.open('', '', 'width=600,height=400');
 
+        // Fungsi untuk mendapatkan waktu dalam format tertentu
+        function getFormattedDate() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+
+            // Format the time as needed (adjust as per your requirements)
+            var formattedDate = `[${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}, ${hours}:${minutes}:${seconds}]`;
+            return formattedDate;
+        }
+
+        // Mendapatkan total dan jumlah tunai
+        const totalHarga = $('#totalHarga').text().replace('Rp. ', '');
+        const cashAmount = prompt('Masukkan jumlah tunai:'); // You can replace this with a proper input form
+
+        // Kirim total dan jumlah tunai ke server untuk menghitung kembalian
+        $.ajax({
+            type: "POST",
+            url: "calculate_change.php", // Sesuaikan dengan path yang benar
+            data: {
+                totalHarga: totalHarga,
+                cashAmount: cashAmount
+            },
+            success: function(response) {
+                // Update the receipt with the calculated change
+                const kembalian = JSON.parse(response).kembalian;
+
+                // Update kembalian element
+                $('#kembalian').text('Rp. ' + kembalian);
+
+                // Update total penjualan element (optional, if needed)
+                const totalPenjualan = cashAmount - kembalian;
+                $('#totalPenjualan').text('Rp. ' + totalPenjualan);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error calculating change: " + error);
+            }
+        });
+
         // Isi struk yang akan dicetak
         var strukHTML = `
-    <html>
-    <head>
-        <title>Struk Pesanan</title>
-        <!-- Include Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-..."
-            crossorigin="anonymous">
-    </head>
-    <body>
-        <div class="container mt-3">
-            <h2 class="mb-4">Struk Pesanan</h2>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Harga</th>
-                        <th>Jumlah</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${keranjang.map(item => `
+        <html>
+        <head>
+            <title>Struk Pesanan</title>
+            <!-- Include Bootstrap CSS -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-..."
+                crossorigin="anonymous">
+            <style>
+                /* Add custom styles here */
+                .store-details {
+                    text-align: center;
+                    margin-bottom: 10px;
+                }
+
+                .store-logo {
+                    max-width: 80px;
+                    max-height: 80px;
+                    margin-bottom: 5px;
+                }
+
+                .receipt-header {
+                    font-size: 1.2em;
+                    margin-bottom: 8px;
+                }
+
+                /* Center the table */
+                .table {
+                    margin: auto;
+                }
+
+                /* Add borders to table cells */
+                .table th,
+                .table td {
+                    border: 1px solid #dee2e6;
+                }
+
+                .receipt-description {
+                    font-style: italic;
+                    margin-top: 15px;
+                    font-size: 0.9em;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container mt-2">
+                <div class="store-details">
+                    <img src="path/to/store/logo.png" alt="Store Logo" class="store-logo">
+                    <h2>Nama Warung</h2>
+                    <p>Alamat Warung, Kota</p>
+                </div>
+                <h2 class="mb-3 receipt-header">Struk Pesanan</h2>
+                <p>Urutan Struk: #12345</p>
+                <p>Tanggal Struk Cetak: ${getFormattedDate()}</p>
+                <p>Nama Pengguna Kasir: John Doe</p>
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>${item.nama}</td>
-                            <td>Rp. ${item.harga}</td>
-                            <td>${item.quantity}</td>
-                            <td>Rp. ${item.subtotal}</td>
+                            <th>Item</th>
+                            <th>Harga</th>
+                            <th>Jumlah</th>
+                            <th>Subtotal</th>
                         </tr>
-                    `).join('')}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3"><strong>Total:</strong></td>
-                        <td><strong>Rp. ${totalHarga}</strong></td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </body>
-    </html>
+                    </thead>
+                    <tbody>
+                        ${keranjang.map(item => `
+                            <tr>
+                                <td>${item.nama}</td>
+                                <td>Rp. ${item.harga}</td>
+                                <td>${item.quantity}</td>
+                                <td>Rp. ${item.subtotal}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3"><strong>Total Pembelian:</strong></td>
+                            <td><strong>Rp. ${totalHarga}</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Subtotal:</td>
+                            <td>Rp. ${totalHarga}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Total Diskon:</td>
+                            <td>Rp. 0</td> <!-- Adjust as per your discount calculation -->
+                        </tr>
+                        <tr>
+                            <td colspan="3">Total Penjualan:</td>
+                            <td>Rp. ${totalHarga}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Tunai:</td>
+                            <td>Rp. 50000</td> <!-- Adjust as per the actual cash amount -->
+                        </tr>
+                        <tr>
+                            <td colspan="3">Kembalian:</td>
+                            <td id="kembalian">Rp. 0</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <p class="receipt-description">Terima kasih atas kunjungan Anda! Selamat menikmati pesanan Anda.</p>
+            </div>
+        </body>
+        </html>
     `;
 
         // Menuliskan struk ke jendela cetak
@@ -334,9 +441,17 @@ $pages = 'Menu';
         printWindow.close();
     }
 
+
+
+
     // Event listener untuk tombol "Cetak Struk"
     document.getElementById("cetakStruk").addEventListener("click", function() {
-        cetakStruk(); // Memanggil fungsi cetakStruk saat tombol "Cetak Struk" ditekan
+        // Check if the cart is empty
+        if (keranjang.length > 0) {
+            cetakStruk(); // Memanggil fungsi cetakStruk saat tombol "Cetak Struk" ditekan
+        } else {
+            alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
+        }
     });
 
     // Event listener for the "Konfirmasi" button
@@ -353,6 +468,12 @@ $pages = 'Menu';
 
     // Event listener for the "Simpan" button inside the modal
     $("#simpanBtn").on("click", function() {
+        // Check if the cart is empty before saving
+        if (keranjang.length === 0) {
+            alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
+            return;
+        }
+
         // Create an object to store the order data
         const orderData = {
             keranjang,

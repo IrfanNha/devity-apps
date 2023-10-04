@@ -30,11 +30,11 @@ SET time_zone = "+00:00";
 CREATE TABLE `items` (
   `id` int NOT NULL,
   `item_name` varchar(255) NOT NULL,
-  `item_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `item_code` varchar(255) NOT NULL,
   `user_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `price` decimal(10,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data untuk tabel `items`
@@ -73,7 +73,7 @@ CREATE TABLE `items_stock` (
   `item_id` int NOT NULL,
   `items_qty` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data untuk tabel `items_stock`
@@ -109,7 +109,7 @@ CREATE TABLE `laporan_keuangan` (
   `user_id` int NOT NULL,
   `total_harga` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 -- --------------------------------------------------------
 
@@ -123,7 +123,7 @@ CREATE TABLE `login_attempts` (
   `ip_address` varchar(255) NOT NULL,
   `success` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data untuk tabel `login_attempts`
@@ -195,7 +195,7 @@ CREATE TABLE `menu` (
   `nama` varchar(255) NOT NULL,
   `harga` decimal(10,2) NOT NULL,
   `user_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data untuk tabel `menu`
@@ -239,7 +239,7 @@ CREATE TABLE `riwayat_penjualan` (
   `quantity` int NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data untuk tabel `riwayat_penjualan`
@@ -266,7 +266,7 @@ CREATE TABLE `users` (
   `subs_expiry` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `is_paid` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data untuk tabel `users`
@@ -312,7 +312,7 @@ CREATE TABLE `users_preferences` (
   `store_name` varchar(255) DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 --
 -- Dumping data untuk tabel `users_preferences`
