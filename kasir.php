@@ -17,100 +17,106 @@ $conn = $database->getConnection();
 include 'components/templates/header.php';
 include 'components/partials/dashboard.header.php';
 
-// Query database untuk mengambil daftar item
-$query = "SELECT id, item_name, price FROM items";
-$stmt = $conn->prepare($query);
-$stmt->execute();
-$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Inisialisasi variabel
+$item_id = "";
+$quantity = "";
+$total = "";
+
+// Menangani penjualan
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $item_id = $_POST["item_id"];
+  $quantity = $_POST["quantity"];
+
+  // Validasi item dan jumlah
+  if (!empty($item_id) && is_numeric($quantity) && $quantity > 0) {
+    // Query untuk mendapatkan informasi item
+    $query = "SELECT item_name, price FROM items WHERE id = :item_id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':item_id', $item_id);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+      $item_name = $row['item_name'];
+      $price = $row['price'];
+      $total = $price * $quantity;
+
+      // Simpan riwayat penjualan ke database
+      $query = "INSERT INTO riwayat_penjualan (user_id, item_name, quantity, total) VALUES (:user_id, :item_name, :quantity, :total)";
+      $stmt = $conn->prepare($query);
+      $stmt->bindParam(':user_id', $_SESSION['user_id']);
+      $stmt->bindParam(':item_name', $item_name);
+      $stmt->bindParam(':quantity', $quantity);
+      $stmt->bindParam(':total', $total);
+      $stmt->execute();
+
+      // Reset variabel
+      $item_id = "";
+      $quantity = "";
+      $total = "";
+    } else {
+      echo "Item tidak ditemukan.";
+    }
+  } else {
+    echo "Isian tidak valid.";
+  }
+}
 ?>
 
-<!-- Tambahkan formulir untuk transaksi -->
+<!-- Tambahkan konten HTML untuk halaman kasir di sini -->
 <div class="container">
-  <h2>Form Transaksi</h2>
-  <form method="POST" action="proses_transaksi.php">
+  <h2>Selamat datang di halaman kasir</h2>
+  <form method="post" action="">
     <div class="form-group">
-      <label for="item">Pilih Item:</label>
-      <select class="form-control" id="item" name="item[]" multiple>
-        <?php foreach ($items as $item) : ?>
-          <option value="<?php echo $item['id']; ?>" data-price="<?php echo $item['price']; ?>">
-            <?php echo $item['item_name']; ?>
-          </option>
-        <?php endforeach; ?>
+      <label for="item_id">Pilih Item:</label>
+      <select class="form-control" name="item_id" id="item_id">
+        <!-- Ambil daftar item dari database dan tampilkan dalam pilihan -->
+        <?php
+        $query = "SELECT id, item_name, price FROM items";
+        $stmt = $conn->query($query);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          echo "<option value='" . $row['id'] . "'>" . $row['item_name'] . " - Rp " . number_format($row['price'], 2) . "</option>";
+        }
+        ?>
       </select>
     </div>
-    <div id="input-container">
-      <!-- Input grup untuk jumlah -->
-    </div>
     <div class="form-group">
-      <button type="button" class="btn btn-primary" id="add-input">Tambah Item</button>
+      <label for="quantity">Jumlah:</label>
+      <input type="number" class="form-control" name="quantity" id="quantity" value="<?php echo $quantity; ?>">
     </div>
-    <div class="form-group">
-      <label for="total">Total Pembayaran:</label>
-      <input type="text" class="form-control" id="total" name="total" readonly>
-    </div>
-    <button type="submit" class="btn btn-success">Proses Transaksi</button>
+    <button type="submit" class="btn btn-primary">Tambahkan ke Keranjang</button>
   </form>
-</div>
 
-<!-- Tambahkan script JavaScript untuk menangani tampilan input -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Ambil elemen-elemen yang diperlukan
-    const itemSelect = document.getElementById('item');
-    const inputContainer = document.getElementById('input-container');
-    const totalInput = document.getElementById('total');
-    const addInputButton = document.getElementById('add-input');
-
-    // Inisialisasi array untuk menyimpan elemen-elemen input yang ditambahkan
-    const inputElements = [];
-
-    // Tambahkan event listener untuk tombol "Tambah Item"
-    addInputButton.addEventListener('click', function() {
-      const selectedItem = itemSelect.options[itemSelect.selectedIndex];
-      const itemId = selectedItem.value;
-      const itemName = selectedItem.text;
-      const itemPrice = selectedItem.getAttribute('data-price');
-
-      // Buat elemen input baru
-      const inputGroup = document.createElement('div');
-      inputGroup.classList.add('form-group');
-
-      const label = document.createElement('label');
-      label.textContent = itemName;
-
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.classList.add('form-control');
-      input.name = `quantity[${itemId}]`;
-      input.placeholder = 'Jumlah';
-
-      // Tambahkan elemen input ke dalam container
-      inputGroup.appendChild(label);
-      inputGroup.appendChild(input);
-      inputContainer.appendChild(inputGroup);
-
-      // Simpan elemen input dalam array
-      inputElements.push(input);
-
-      // Hitung total pembayaran saat ini
-      calculateTotal();
-    });
-
-    // Fungsi untuk menghitung total pembayaran
-    function calculateTotal() {
-      let total = 0;
-
-      for (const input of inputElements) {
-        const itemId = input.name.match(/\[(.*?)\]/)[1];
-        const quantity = input.value;
-        const itemPrice = document.querySelector(`option[value="${itemId}"]`).getAttribute('data-price');
-        total += itemPrice * quantity;
+  <!-- Menampilkan riwayat penjualan -->
+  <h3>Riwayat Penjualan:</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Jumlah</th>
+        <th>Total</th>
+        <th>Tanggal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Ambil data riwayat penjualan dari database dan tampilkan dalam tabel -->
+      <?php
+      $query = "SELECT item_name, quantity, total, created_at FROM riwayat_penjualan WHERE user_id = :user_id";
+      $stmt = $conn->prepare($query);
+      $stmt->bindParam(':user_id', $_SESSION['user_id']);
+      $stmt->execute();
+      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo "<tr>";
+        echo "<td>" . $row['item_name'] . "</td>";
+        echo "<td>" . $row['quantity'] . "</td>";
+        echo "<td>Rp " . number_format($row['total'], 2) . "</td>";
+        echo "<td>" . $row['created_at'] . "</td>";
+        echo "</tr>";
       }
-
-      totalInput.value = total;
-    }
-  });
-</script>
+      ?>
+    </tbody>
+  </table>
+</div>
 
 <?php
 include 'components/partials/dashboard.footer.php';

@@ -89,8 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 
-// Fetch items_stock data and calculate total
-$query = "SELECT i.item_name, stk.item_id, SUM(stk.items_qty) AS total_items_qty
+$query = "SELECT i.item_code, i.item_name, stk.item_id, SUM(stk.items_qty) AS total_items_qty
           FROM items_stock AS stk
           JOIN items AS i ON stk.item_id = i.id
           WHERE stk.user_id = :user_id
@@ -100,6 +99,7 @@ $stmt = $conn->prepare($query);
 $stmt->bindParam(':user_id', $_SESSION['user_id']);
 $stmt->execute();
 $stok_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!-- Display items_stock data and total here -->
@@ -181,7 +181,7 @@ if (isset($_SESSION['stock_error'])) {
       <thead>
         <tr>
           <th>#</th>
-          <th>Item ID</th>
+          <th>Item Code</th> <!-- Tambahkan kolom "Item Code" -->
           <th>Item Name</th>
           <th>Items Qty</th>
         </tr>
@@ -192,7 +192,7 @@ if (isset($_SESSION['stock_error'])) {
         foreach ($stok_items as $stok_item) : ?>
           <tr>
             <td><?php echo ++$row_count ?></td>
-            <td><?php echo $stok_item['item_code']; ?></td>
+            <td><?php echo $stok_item['item_code']; ?></td> <!-- Menampilkan Item Code -->
             <td><?php echo $stok_item['item_name']; ?></td>
             <td class="fw-bold"><?php echo $stok_item['total_items_qty']; ?></td>
           </tr>
@@ -201,6 +201,7 @@ if (isset($_SESSION['stock_error'])) {
     </table>
   </div>
 </div>
+
 </div>
 
 <?php

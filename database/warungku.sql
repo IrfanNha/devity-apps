@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 03 Okt 2023 pada 12.21
+-- Waktu pembuatan: 04 Okt 2023 pada 14.33
 -- Versi server: 8.0.30
 -- Versi PHP: 7.4.33
 
@@ -81,7 +81,8 @@ CREATE TABLE `items_stock` (
 
 INSERT INTO `items_stock` (`id`, `user_id`, `item_id`, `items_qty`, `created_at`) VALUES
 (96, 1, 31, 0, '2023-10-03 12:06:02'),
-(97, 1, 31, 0, '2023-10-03 12:06:02');
+(97, 1, 31, 0, '2023-10-03 12:06:02'),
+(98, 1, 31, 12, '2023-10-04 13:58:20');
 
 -- --------------------------------------------------------
 
@@ -180,7 +181,8 @@ INSERT INTO `login_attempts` (`id`, `user_id`, `ip_address`, `success`, `created
 (49, 1, '103.3.222.20', 1, '2023-09-30 11:35:02'),
 (50, 1, '::1', 1, '2023-10-02 02:36:23'),
 (51, 1, '182.2.52.206', 1, '2023-10-02 02:59:55'),
-(52, 1, '114.10.18.179', 1, '2023-10-03 11:48:20');
+(52, 1, '114.10.18.179', 1, '2023-10-03 11:48:20'),
+(53, 1, '103.3.221.72', 1, '2023-10-04 12:56:30');
 
 -- --------------------------------------------------------
 
@@ -223,6 +225,28 @@ INSERT INTO `riwayat_order` (`id`, `data`, `created_at`, `user_id`) VALUES
 (1, '{\"keranjang\":[{\"nama\":\"Menu1\",\"harga\":10,\"quantity\":2,\"subtotal\":20},{\"nama\":\"Menu2\",\"harga\":15,\"quantity\":1,\"subtotal\":15}],\"totalHarga\":35}', '2023-10-02 03:04:56', 1),
 (2, '{\"keranjang\":[{\"nama\":\"Menu3\",\"harga\":8,\"quantity\":3,\"subtotal\":24},{\"nama\":\"Menu1\",\"harga\":10,\"quantity\":1,\"subtotal\":10}],\"totalHarga\":34}', '2023-10-02 03:04:56', 2),
 (3, '{\"keranjang\":[{\"nama\":\"Menu2\",\"harga\":15,\"quantity\":2,\"subtotal\":30},{\"nama\":\"Menu3\",\"harga\":8,\"quantity\":2,\"subtotal\":16}],\"totalHarga\":46}', '2023-10-02 03:04:56', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `riwayat_penjualan`
+--
+
+CREATE TABLE `riwayat_penjualan` (
+  `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `item_name` varchar(255) NOT NULL,
+  `quantity` int NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `riwayat_penjualan`
+--
+
+INSERT INTO `riwayat_penjualan` (`id`, `user_id`, `item_name`, `quantity`, `total`, `created_at`) VALUES
+(1, 1, 'susu kental manis', 1, 10000.00, '2023-10-04 13:38:26');
 
 -- --------------------------------------------------------
 
@@ -352,6 +376,12 @@ ALTER TABLE `riwayat_order`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `riwayat_penjualan`
+--
+ALTER TABLE `riwayat_penjualan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
@@ -378,7 +408,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT untuk tabel `items_stock`
 --
 ALTER TABLE `items_stock`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT untuk tabel `laporan_kasir`
@@ -396,7 +426,7 @@ ALTER TABLE `laporan_keuangan`
 -- AUTO_INCREMENT untuk tabel `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT untuk tabel `menu`
@@ -409,6 +439,12 @@ ALTER TABLE `menu`
 --
 ALTER TABLE `riwayat_order`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `riwayat_penjualan`
+--
+ALTER TABLE `riwayat_penjualan`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`

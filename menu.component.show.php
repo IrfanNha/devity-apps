@@ -31,7 +31,7 @@
                             // Tampilkan data sesuai kebutuhan, misalnya:
                             echo '<tr>';
                             echo '<td>' . $row['nama'] . '</td>';
-                            echo '<td>Rp. ' . number_format($row['harga'], 0, ',', '.') . '</td>';
+                            echo '<td>Rp. ' . number_format($row['harga'], 0, ',', '.') . ',00</td>';
                             echo '<td>';
                             echo '<div class="d-flex">';
                             echo '<button type="button" class="btn btn-warning btn-sm me-1" data-bs-toggle="modal" data-bs-target="#editMenuModal" data-id="' . $row['id'] . '" data-nama="' . $row['nama'] . '" data-harga="' . $row['harga'] . '"><i class="fas fa-edit"></i></button>';
