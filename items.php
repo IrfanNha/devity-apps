@@ -199,7 +199,7 @@ $row_count = 0;
               <td><?php echo ++$row_count ?></td>
               <td><?php echo $item['item_name']; ?></td>
               <td><?php echo $item['item_code']; ?></td>
-              <td>Rp. <?php echo number_format($item['price'], 0, ',', '.'); ?></td>
+              <td>Rp. <?php echo number_format($item['price'], 0, ',', '.');  ?>,00</td>
               <td>
                 <div class="d-md-block d-none"><?php echo $item['created_at']; ?> </div>
               </td>
