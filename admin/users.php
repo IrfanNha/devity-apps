@@ -7,11 +7,11 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-// // Check if user_rank is not 3
-// if ($_SESSION['user_rank'] !== "3") {
-//   header("Location: 403.php");
-//   exit;
-// }
+// Check if user_rank is not 3
+if ($_SESSION['user_rank'] !== "3") {
+  header("Location: 403.php");
+  exit;
+}
 
 $pages = 'daftar users';
 ?>
@@ -276,7 +276,7 @@ $userData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                           <!-- Input field for editing subscription expiry -->
                           <div class="mb-3">
                             <label for="edit_subs_expiry" class="form-label">Subscription Expiry</label>
-                            <input type="date" class="form-control" id="edit_subs_expiry" name="edit_subs_expiry" value="<?php echo $user['subs_expiry']; ?>" required>
+                            <input type="date" class="form-control" id="edit_subs_expiry" name="edit_subs_expiry" value="<?php echo $user['subs_expiry']; ?>">
                           </div>
 
                           <!-- Input field for editing is active status -->

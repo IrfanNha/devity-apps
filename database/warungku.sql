@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 04 Okt 2023 pada 14.33
+-- Waktu pembuatan: 09 Okt 2023 pada 14.59
 -- Versi server: 8.0.30
 -- Versi PHP: 7.4.33
 
@@ -24,6 +24,35 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `activation_keys`
+--
+
+CREATE TABLE `activation_keys` (
+  `id` int NOT NULL,
+  `user_id` int DEFAULT NULL,
+  `activation_key` varchar(25) NOT NULL,
+  `is_used` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `activation_keys`
+--
+
+INSERT INTO `activation_keys` (`id`, `user_id`, `activation_key`, `is_used`) VALUES
+(1, 1, 'NS4Y9F62G3IG3ZM14JT4R2ZMV', 1),
+(2, NULL, 'E0LJMJIDTSW6QGGFOXG2K50VX', 0),
+(3, NULL, 'NZ5GLSQFTGK2EIU78M130C6ZS', 0),
+(4, NULL, 'FNAGIF7DXJRQA81BNRPR7EUKG', 0),
+(5, NULL, 'YANRKQ5R23IOJKOVVHY41O4P2', 0),
+(6, NULL, 'K29UAR7P84QH92GHB0ERF1MEK', 0),
+(7, NULL, 'SDMZU2GL6IZE01273RZNKK5JU', 0),
+(8, NULL, '70R7VDKD7E2K4TX90NYPULWPO', 0),
+(9, NULL, 'D25U478SXCIRGBI9YTKKHM7XP', 0),
+(10, NULL, 'QRLU3K3DKCKF2H4EH3EVR8P61', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `items`
 --
 
@@ -34,7 +63,7 @@ CREATE TABLE `items` (
   `user_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `price` decimal(10,2) DEFAULT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `items`
@@ -73,7 +102,7 @@ CREATE TABLE `items_stock` (
   `item_id` int NOT NULL,
   `items_qty` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `items_stock`
@@ -96,7 +125,7 @@ CREATE TABLE `laporan_kasir` (
   `item_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `harga` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -109,7 +138,7 @@ CREATE TABLE `laporan_keuangan` (
   `user_id` int NOT NULL,
   `total_harga` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -123,7 +152,7 @@ CREATE TABLE `login_attempts` (
   `ip_address` varchar(255) NOT NULL,
   `success` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `login_attempts`
@@ -195,7 +224,7 @@ CREATE TABLE `menu` (
   `nama` varchar(255) NOT NULL,
   `harga` decimal(10,2) NOT NULL,
   `user_id` int DEFAULT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `menu`
@@ -215,7 +244,7 @@ CREATE TABLE `riwayat_order` (
   `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `riwayat_order`
@@ -239,7 +268,7 @@ CREATE TABLE `riwayat_penjualan` (
   `quantity` int NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `riwayat_penjualan`
@@ -266,7 +295,7 @@ CREATE TABLE `users` (
   `subs_expiry` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `is_paid` tinyint(1) DEFAULT '0'
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `users`
@@ -312,7 +341,7 @@ CREATE TABLE `users_preferences` (
   `store_name` varchar(255) DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data untuk tabel `users_preferences`
@@ -325,6 +354,13 @@ INSERT INTO `users_preferences` (`id`, `user_id`, `image`, `store_name`, `alamat
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indeks untuk tabel `activation_keys`
+--
+ALTER TABLE `activation_keys`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `activation_key` (`activation_key`);
 
 --
 -- Indeks untuk tabel `items`
@@ -399,6 +435,12 @@ ALTER TABLE `users_preferences`
 --
 
 --
+-- AUTO_INCREMENT untuk tabel `activation_keys`
+--
+ALTER TABLE `activation_keys`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT untuk tabel `items`
 --
 ALTER TABLE `items`
@@ -438,7 +480,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT untuk tabel `riwayat_order`
 --
 ALTER TABLE `riwayat_order`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `riwayat_penjualan`

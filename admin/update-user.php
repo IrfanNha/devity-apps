@@ -6,10 +6,10 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-// if ($_SESSION['user_rank'] !== "3") {
-//   header("Location: 403.php");
-//   exit;
-// }
+if ($_SESSION['user_rank'] !== "3") {
+  header("Location: 403.php");
+  exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if (isset($_POST['user_id'])) {

@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-// // Pastikan pengguna yang mencoba mengakses halaman ini adalah admin atau super admin
-// if (!isset($_SESSION['user_id']) || $_SESSION['user_rank'] < 2) {
-//   header("Location: 403.php");
-//   exit;
-// }
+// Pastikan pengguna yang mencoba mengakses halaman ini adalah admin atau super admin
+if (!isset($_SESSION['user_id']) || $_SESSION['user_rank'] < 2) {
+  header("Location: 403.php");
+  exit;
+}
 
 // Pastikan data yang diperlukan telah dikirimkan melalui POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {

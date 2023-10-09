@@ -7,11 +7,11 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-// // Check if user_rank is not 3
-// if ($_SESSION['user_rank'] !== "3") {
-//   header("Location: 403.php");
-//   exit;
-// }
+// Check if user_rank is not 3
+if ($_SESSION['user_rank'] !== "3") {
+  header("Location: 403.php");
+  exit;
+}
 
 $pages = "print";
 // Pastikan Anda telah mengimpor library TCPDF
