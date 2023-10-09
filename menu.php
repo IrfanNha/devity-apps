@@ -76,6 +76,7 @@ $pages = 'Menu';
                     // Close the database connection
                     $conn = null;
                     ?>
+
                 </div>
                 <div class="notification-badge">
                     <i class="fa-solid fa-cart-shopping" data-bs-toggle="modal" href="#mdlProfileUser"></i>
@@ -113,14 +114,17 @@ $pages = 'Menu';
                                 <td colspan="3"><strong>Total:</strong></td>
                                 <td><strong id="totalHarga">Rp. 0</strong></td>
                             </tr>
+                            <tr>
+                                <td colspan="3"><strong><label for="cashAmount">Jumlah Tunai:</label></strong></td>
+                                <td><strong><input type="text" class="form-control" id="cashAmount" placeholder="Masukkan jumlah tunai"></strong></td>
+                            </tr>
+
                         </tfoot>
                     </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="resetKeranjang">Reset</button>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiPesanan">Konfirmasi</button>
                     <button type="button" class="btn btn-success" onclick="cetakStruk()">Cetak Struk</button>
-                    <!-- Button to save the order (customize as needed) -->
                     <button type="button" class="btn btn-primary" id="simpanBtn">Simpan</button>
                 </div>
             </div>
@@ -146,8 +150,6 @@ $pages = 'Menu';
             </div>
         </div>
     </div>
-
-</div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -276,7 +278,56 @@ $pages = 'Menu';
         resetKeranjang(); // Memanggil fungsi resetKeranjang saat tombol "Reset" ditekan
     });
 
-    // <!-- Fungsi untuk mencetak struk -->
+    // Event listener untuk tombol "Simpan"
+    document.getElementById("simpanBtn").addEventListener("click", function() {
+        simpanBtn(); // Memanggil fungsi simpanBtn saat tombol "Simpan" ditekan
+    });
+
+    // Fungsi untuk mengepost Data
+    function simpanBtn() {
+        // Check if the cart is empty before saving
+        if (keranjang.length === 0) {
+            alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
+            return;
+        }
+
+        // Persiapkan data untuk dikirim
+        const orderData = {
+            keranjang,
+            totalHarga
+        };
+
+        // Kirim data ke server menggunakan AJAX
+        $.ajax({
+            type: "POST",
+            url: "simpan_pembelian.php", // Sesuaikan dengan path yang benar
+            data: {
+                orderData: JSON.stringify(orderData) // Menggunakan JSON.stringify untuk mengirim data dalam bentuk string JSON
+            },
+            success: function(response) {
+                // Handle the server's response here
+                console.log(response);
+
+                // Check if the response is successful
+                const responseData = JSON.parse(response);
+                if (responseData.status === "success") {
+                    // Jika penyimpanan berhasil, tambahkan logika lain jika diperlukan
+                    console.log("Order berhasil disimpan ke database.");
+                    location.reload();
+                } else {
+                    // Handle the case where the save was not successful
+                    console.error("Error saving order: " + responseData.message);
+                    // Optionally, show an error message to the user
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle errors here
+                console.error("Error saving order: " + error);
+                // Optionally, show an error message to the user
+            }
+        });
+    }
+
     function cetakStruk() {
         // Buka jendela cetak
         var printWindow = window.open('', '', 'width=600,height=400');
@@ -298,138 +349,115 @@ $pages = 'Menu';
 
         // Mendapatkan total dan jumlah tunai
         const totalHarga = $('#totalHarga').text().replace('Rp. ', '');
-        const cashAmount = prompt('Masukkan jumlah tunai:'); // You can replace this with a proper input form
-
-        // Kirim total dan jumlah tunai ke server untuk menghitung kembalian
-        $.ajax({
-            type: "POST",
-            url: "calculate_change.php", // Sesuaikan dengan path yang benar
-            data: {
-                totalHarga: totalHarga,
-                cashAmount: cashAmount
-            },
-            success: function(response) {
-                // Update the receipt with the calculated change
-                const kembalian = JSON.parse(response).kembalian;
-
-                // Update kembalian element
-                $('#kembalian').text('Rp. ' + kembalian);
-
-                // Update total penjualan element (optional, if needed)
-                const totalPenjualan = cashAmount - kembalian;
-                $('#totalPenjualan').text('Rp. ' + totalPenjualan);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error calculating change: " + error);
-            }
-        });
+        const cashAmount = $('#cashAmount').val(); // Retrieve cash amount from the input field
 
         // Isi struk yang akan dicetak
         var strukHTML = `
         <html>
-        <head>
-            <title>Struk Pesanan</title>
-            <!-- Include Bootstrap CSS -->
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-..."
-                crossorigin="anonymous">
-            <style>
-                /* Add custom styles here */
-                .store-details {
-                    text-align: center;
-                    margin-bottom: 10px;
-                }
+<head>
+    <title>Struk Pesanan</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-..." crossorigin="anonymous">
+    <style>
+        /* Add custom styles here */
+        .store-details {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-                .store-logo {
-                    max-width: 80px;
-                    max-height: 80px;
-                    margin-bottom: 5px;
-                }
+        .store-logo {
+            max-width: 80px;
+            max-height: 80px;
+            margin-bottom: 5px;
+        }
 
-                .receipt-header {
-                    font-size: 1.2em;
-                    margin-bottom: 8px;
-                }
+        .receipt-header {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+        }
 
-                /* Center the table */
-                .table {
-                    margin: auto;
-                }
+        /* Center the table */
+        .table {
+            margin: auto;
+        }
 
-                /* Add borders to table cells */
-                .table th,
-                .table td {
-                    border: 1px solid #dee2e6;
-                }
+        /* Add borders to table cells */
+        .table th,
+        .table td {
+            border: 1px solid #dee2e6;
+        }
 
-                .receipt-description {
-                    font-style: italic;
-                    margin-top: 15px;
-                    font-size: 0.9em;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container mt-2">
-                <div class="store-details">
-                    <img src="path/to/store/logo.png" alt="Store Logo" class="store-logo">
-                    <h2>Nama Warung</h2>
-                    <p>Alamat Warung, Kota</p>
-                </div>
-                <h2 class="mb-3 receipt-header">Struk Pesanan</h2>
-                <p>Urutan Struk: #12345</p>
-                <p>Tanggal Struk Cetak: ${getFormattedDate()}</p>
-                <p>Nama Pengguna Kasir: John Doe</p>
-                <table class="table table-bordered">
-                    <thead>
+        .receipt-description {
+            font-style: italic;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-2">
+        <div class="store-details">
+            <img src="path/to/store/logo.png" alt="Store Logo" class="store-logo">
+            <h2>Nama Warung</h2>
+            <p>Alamat Warung, Kota</p>
+        </div>
+        <h2 class="mb-3 receipt-header">Struk Pesanan</h2>
+        <p>Urutan Struk: #12345</p>
+        <p>Tanggal Struk Cetak: ${getFormattedDate()}</p>
+        <p>Nama Pengguna Kasir: John Doe</p>
+        <div class="table-responsive"> <!-- Make the table responsive -->
+            <table class="table table-bordered text-center"> <!-- Center the content in the table -->
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Harga</th>
+                        <th>Jumlah</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${keranjang.map(item => `
                         <tr>
-                            <th>Item</th>
-                            <th>Harga</th>
-                            <th>Jumlah</th>
-                            <th>Subtotal</th>
+                            <td>${item.nama}</td>
+                            <td>Rp. ${item.harga}</td>
+                            <td>${item.quantity}</td>
+                            <td>Rp. ${item.subtotal}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        ${keranjang.map(item => `
-                            <tr>
-                                <td>${item.nama}</td>
-                                <td>Rp. ${item.harga}</td>
-                                <td>${item.quantity}</td>
-                                <td>Rp. ${item.subtotal}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3"><strong>Total Pembelian:</strong></td>
-                            <td><strong>Rp. ${totalHarga}</strong></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Subtotal:</td>
-                            <td>Rp. ${totalHarga}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Total Diskon:</td>
-                            <td>Rp. 0</td> <!-- Adjust as per your discount calculation -->
-                        </tr>
-                        <tr>
-                            <td colspan="3">Total Penjualan:</td>
-                            <td>Rp. ${totalHarga}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3">Tunai:</td>
-                            <td>Rp. 50000</td> <!-- Adjust as per the actual cash amount -->
-                        </tr>
-                        <tr>
-                            <td colspan="3">Kembalian:</td>
-                            <td id="kembalian">Rp. 0</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <p class="receipt-description">Terima kasih atas kunjungan Anda! Selamat menikmati pesanan Anda.</p>
-            </div>
-        </body>
-        </html>
-    `;
+                    `).join('')}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3"><strong>Total Pembelian:</strong></td>
+                        <td><strong>Rp. ${totalHarga}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Subtotal:</td>
+                        <td>Rp. ${totalHarga}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Total Diskon:</td>
+                        <td>Rp. 0</td> <!-- Adjust as per your discount calculation -->
+                    </tr>
+                    <tr>
+                        <td colspan="3">Total Penjualan:</td>
+                        <td>Rp. ${totalHarga}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><strong><label for="cashAmount">Jumlah Tunai:</label></strong></td>
+                        <td><strong>Rp. ${cashAmount}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Kembalian:</td>
+                        <td>Rp. ${cashAmount - totalHarga}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <p class="receipt-description">Terima kasih atas kunjungan Anda! Selamat menikmati pesanan Anda.</p>
+    </div>
+</body>
+</html>
+`;
 
         // Menuliskan struk ke jendela cetak
         printWindow.document.open();
@@ -443,75 +471,71 @@ $pages = 'Menu';
 
 
 
+    // // Event listener untuk tombol "Cetak Struk"
+    // document.getElementById("cetakStruk").addEventListener("click", function() {
+    //     // Check if the cart is empty
+    //     if (keranjang.length > 0) {
+    //         cetakStruk(); // Memanggil fungsi cetakStruk saat tombol "Cetak Struk" ditekan
+    //     } else {
+    //         alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
+    //     }
+    // });
 
-    // Event listener untuk tombol "Cetak Struk"
-    document.getElementById("cetakStruk").addEventListener("click", function() {
-        // Check if the cart is empty
-        if (keranjang.length > 0) {
-            cetakStruk(); // Memanggil fungsi cetakStruk saat tombol "Cetak Struk" ditekan
-        } else {
-            alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
-        }
-    });
 
-    // Event listener for the "Konfirmasi" button
-    document.getElementById("konfirmasiButton").addEventListener("click", function() {
-        $('#konfirmasiModal').modal('hide'); // Close the current modal
-        $('#mdlProfileUser').modal('show'); // Show the new modal
-    });
+    // // Event listener for the "Cetak Struk" button inside the modal
+    // document.getElementById("cetakStrukBtn").addEventListener("click", function() {
+    //     cetakStruk(); // Call the cetakStruk function when the "Cetak Struk" button is clicked
+    //     $('#mdlProfileUser').modal('hide'); // Close the modal
+    // });
 
-    // Event listener for the "Cetak Struk" button inside the modal
-    document.getElementById("cetakStrukBtn").addEventListener("click", function() {
-        cetakStruk(); // Call the cetakStruk function when the "Cetak Struk" button is clicked
-        $('#mdlProfileUser').modal('hide'); // Close the modal
-    });
 
-    // Event listener for the "Simpan" button inside the modal
-    $("#simpanBtn").on("click", function() {
-        // Check if the cart is empty before saving
-        if (keranjang.length === 0) {
-            alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
-            return;
-        }
+    // // Event listener for the "Simpan" button inside the modal
+    // $("#simpanBtn").on("click", function() {
+    //     // Check if the cart is empty before saving
+    //     if (keranjang.length === 0) {
+    //         alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
+    //         return;
+    //     }
 
-        // Create an object to store the order data
-        const orderData = {
-            keranjang,
-            totalHarga
-        };
+    //     // Create an object to store the order data
+    //     const orderData = {
+    //         keranjang,
+    //         totalHarga
+    //     };
 
-        // Make an AJAX request to save the order
-        $.ajax({
-            type: "POST",
-            url: "save_order.php", // Ensure the correct path
-            contentType: "application/json",
-            data: JSON.stringify(orderData),
-            success: function(response) {
-                // Handle the server's response here
-                console.log(response);
+    //     // Make an AJAX request to save the order
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "insert_order.php", // Ensure the correct path
+    //         contentType: "application/json",
+    //         data: JSON.stringify(orderData),
+    //         success: function(response) {
+    //             // Handle the server's response here
+    //             console.log(response);
 
-                // Check if the response is successful before closing the modal
-                if (response.status === "success") {
-                    // Close the modal
-                    $('#mdlProfileUser').modal('hide');
+    //             // Check if the response is successful before closing the modal
+    //             const responseData = JSON.parse(response);
+    //             if (responseData.status === "success") {
+    //                 // Close the modal
+    //                 $('#mdlProfileUser').modal('hide');
 
-                    // Reset the cart after saving
-                    resetKeranjang();
+    //                 // Reset the cart after saving
+    //                 resetKeranjang();
 
-                    // Optionally, perform any other actions after successful save
-                } else {
-                    // Handle the case where the save was not successful
-                    console.error("Error saving order: " + response.message);
-                    // Optionally, show an error message to the user
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle errors here
-                console.error("Error saving order: " + error);
-                // Optionally, show an error message to the user
-            }
-        });
-    });
+    //                 // Optionally, perform any other actions after successful save
+    //             } else {
+    //                 // Handle the case where the save was not successful
+    //                 console.error("Error saving order: " + responseData.message);
+    //                 // Optionally, show an error message to the user
+    //             }
+    //         },
+    //         error: function(xhr, status, error) {
+    //             // Handle errors here
+    //             console.error("Error saving order: " + error);
+    //             // Optionally, show an error message to the user
+    //         }
+    //     });
+    // });
 </script>
 
 
