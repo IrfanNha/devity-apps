@@ -64,28 +64,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!-- Tambahkan konten HTML untuk halaman kasir di sini -->
-<div class="container">
-  <h2>Selamat datang di halaman kasir</h2>
-  <form method="post" action="">
-    <div class="form-group">
-      <label for="item_id">Pilih Item:</label>
-      <select class="form-control" name="item_id" id="item_id">
-        <!-- Ambil daftar item dari database dan tampilkan dalam pilihan -->
-        <?php
-        $query = "SELECT id, item_name, price FROM items";
-        $stmt = $conn->query($query);
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          echo "<option value='" . $row['id'] . "'>" . $row['item_name'] . " - Rp " . number_format($row['price'], 2) . "</option>";
-        }
-        ?>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="quantity">Jumlah:</label>
-      <input type="number" class="form-control" name="quantity" id="quantity" value="<?php echo $quantity; ?>">
-    </div>
-    <button type="submit" class="btn btn-primary">Tambahkan ke Keranjang</button>
-  </form>
+<div class="container my-5">
+  <div class="mb-5">
+    <h3>Selamat datang di halaman kasir</h3>
+    <form method="post" action="">
+      <div class="form-group mb-3">
+        <label for="item_id">Pilih Item:</label>
+        <select class="form-control" name="item_id" id="item_id">
+          <!-- Ambil daftar item dari database dan tampilkan dalam pilihan -->
+          <?php
+          $query = "SELECT id, item_name, price FROM items";
+          $stmt = $conn->query($query);
+          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            echo "<option value='" . $row['id'] . "'>" . $row['item_name'] . " - Rp " . number_format($row['price'], 2) . "</option>";
+          }
+          ?>
+        </select>
+      </div>
+      <div class="form-group mb-3">
+        <label for="quantity">Jumlah:</label>
+        <input type="number" class="form-control" name="quantity" id="quantity" value="<?php echo $quantity; ?>">
+      </div>
+      <button type="submit" class="btn btn-primary">Tambahkan ke Keranjang</button>
+    </form>
+  </div>
 
   <!-- Menampilkan riwayat penjualan -->
   <h3>Riwayat Penjualan:</h3>
