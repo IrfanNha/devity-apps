@@ -127,7 +127,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="item-stock.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'laporan keuangan' ? 'bg-dark text-light rounded-1' : ''; ?>">
+            <a href="laporan-keuangan.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'laporan keuangan' ? 'bg-dark text-light rounded-1' : ''; ?>">
               <span class="me-2">
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
