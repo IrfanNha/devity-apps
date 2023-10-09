@@ -120,6 +120,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       <input class="form-control border-end-0" id="inputPassword" type="password" placeholder="Password" minlength="4" name="password" required />
                       <label for="inputPassword">Password</label>
                     </div>
+                    <div class="form-floating mb-3">
+                      <input class=" form-control rounded-3" id="username" name="username" type="text" placeholder="" autocomplete="off" required />
+                      <label for="username">Activation Key</label>
+                    </div>
                     <span class="input-group-text bg-transparent border border-start-0">
                       <button type="button" id="togglePassword" class="btn btn-link text-decoration-none" onclick="togglePasswordVisibility()">
                         <i class="bi bi-eye text-dark" style="font-size: 20px;"></i>
