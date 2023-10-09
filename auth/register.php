@@ -22,15 +22,16 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $username = htmlspecialchars($_POST["username"]);
   $email = htmlspecialchars($_POST["email"]);
   $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+  $activation_key = htmlspecialchars($_POST["activation_keys"]);
 
   $database = new Database();
   $conn = $database->getConnection();
 
+  // Check if the email is already registered
   $query_check_email = "SELECT id FROM users WHERE email = :email";
   $stmt_check_email = $conn->prepare($query_check_email);
   $stmt_check_email->bindParam(':email', $email);
@@ -38,6 +39,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   if ($stmt_check_email->rowCount() > 0) {
     $_SESSION['register_error'] = "Email sudah terdaftar.";
+    echo '<script>window.location.href = "register.php";</script>';
+    exit;
+  }
+
+  // Check if the activation key exists and is not used
+  $query_check_activation_key = "SELECT id FROM activation_keys WHERE activation_key = :activation_key AND is_used = 0";
+  $stmt_check_activation_key = $conn->prepare($query_check_activation_key);
+  $stmt_check_activation_key->bindParam(':activation_key', $activation_key);
+  $stmt_check_activation_key->execute();
+
+  if ($stmt_check_activation_key->rowCount() === 0) {
+    $_SESSION['register_error'] = "Activation key tidak valid atau sudah digunakan.";
     echo '<script>window.location.href = "register.php";</script>';
     exit;
   }
@@ -50,6 +63,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $stmt_insert_user->bindParam(':password', $password);
   $stmt_insert_user->bindParam(':token', $token);
   $stmt_insert_user->execute();
+
+  // Retrieve the user_id of the newly inserted user
+  $user_id = $conn->lastInsertId();
+
+  $activation_key_row = $stmt_check_activation_key->fetch(PDO::FETCH_ASSOC);
+  $activation_key_id = $activation_key_row['id'];
+
+  // Update the activation key with the user_id and mark it as used
+  $query_update_activation_key = "UPDATE activation_keys SET user_id = :user_id, is_used = 1 WHERE id = :activation_key_id";
+  $stmt_update_activation_key = $conn->prepare($query_update_activation_key);
+  $stmt_update_activation_key->bindParam(':user_id', $user_id);
+  $stmt_update_activation_key->bindParam(':activation_key_id', $activation_key_id);
+  $stmt_update_activation_key->execute();
 
   $mail = new PHPMailer();
   $mail->isSMTP();
@@ -120,21 +146,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       <input class="form-control border-end-0" id="inputPassword" type="password" placeholder="Password" minlength="4" name="password" required />
                       <label for="inputPassword">Password</label>
                     </div>
+
                     <span class="input-group-text bg-transparent border border-start-0">
                       <button type="button" id="togglePassword" class="btn btn-link text-decoration-none" onclick="togglePasswordVisibility()">
                         <i class="bi bi-eye text-dark" style="font-size: 20px;"></i>
                       </button>
                     </span>
                   </div>
-                  <?php
-                  if ($subs === 'yes') { ?>
-                    <select class="form-select" aria-label="Default select example" required>
-                      <option selected>Open this select menu</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
-                  <?php }; ?>
+
+                  <div class="form-floating mb-3">
+                    <input class=" form-control rounded-3" id="activation_keys" name="activation_keys" type="text" placeholder="activation keys" autocomplete="off" required />
+                    <label for="activation_keys">Activation keys</label>
+                  </div>
                   <button type="submit" name="login" class="btn btn-dark col-12 rounded-3 mt-4">Register</button>
                 </form>
                 <?php

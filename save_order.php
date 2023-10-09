@@ -7,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Include the Database class and create a database connection
     require 'config/Database.php';
     $database = new Database();
     $conn = $database->getConnection();
@@ -18,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve the order data from the POST request
     $orderData = json_decode(file_get_contents("php://input"));
 
-    // Insert the order data into the database
+    // Insert the order data into the orders table
     $insertOrderQuery = "INSERT INTO orders (user_id, total_price) VALUES (:user_id, :total_price)";
     $stmt = $conn->prepare($insertOrderQuery);
     $stmt->bindParam(':user_id', $user_id);
@@ -36,6 +35,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmtOrderItem->bindParam(':item_price', $item->harga);
             $stmtOrderItem->bindParam(':quantity', $item->quantity);
             $stmtOrderItem->execute();
+        }
+
+        // Insert data into riwayat_pembelian table
+        foreach ($orderData->keranjang as $item) {
+            $insertRiwayatQuery = "INSERT INTO riwayat_pembelian (user_id, item_id, menu, quantity, tgl_pembayaran, pembayaran, id_pembayaran) VALUES (:user_id, :item_id, :menu, :quantity, CURRENT_TIMESTAMP, :pembayaran, :id_pembayaran)";
+            $stmtRiwayat = $conn->prepare($insertRiwayatQuery);
+            $stmtRiwayat->bindParam(':user_id', $user_id);
+            $stmtRiwayat->bindParam(':item_id', $item->item_id); // Adjust as per your actual item_id field
+            $stmtRiwayat->bindParam(':menu', $item->nama);
+            $stmtRiwayat->bindParam(':quantity', $item->quantity);
+            $stmtRiwayat->bindParam(':pembayaran', $orderData->totalHarga);
+            $stmtRiwayat->bindParam(':id_pembayaran', $item->id_pembayaran); // Adjust as per your actual id_pembayaran field
+            $stmtRiwayat->execute();
         }
 
         // Return a success response

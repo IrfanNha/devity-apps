@@ -127,9 +127,12 @@
             </a>
           </li>
           <li class="nav-item">
+<<<<<<< HEAD
             <a href="laporan-keuangan.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'laporan keuangan' ? 'bg-dark text-light rounded-1' : ''; ?>">
+=======
+            <a href="keuangan_laporan.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'laporan keuangan' ? 'bg-dark text-light rounded-1' : ''; ?>">
+>>>>>>> bf81eb10bb3161ec44905602c809921dffa2877b
               <span class="me-2">
-
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" />
                   <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z" />
@@ -140,6 +143,7 @@
               Laporan Uang
             </a>
           </li>
+
 
 
 
@@ -171,6 +175,17 @@
                   </svg>
                 </span>
                 Profile Toko
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="docs.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'dokumentasi' ? 'bg-dark text-light rounded-1' : ''; ?>">
+                <span class="me-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-minus" viewBox="0 0 16 16">
+                    <path d="M5.5 9a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z" />
+                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                  </svg>
+                </span>
+                Dokumentasi
               </a>
             </li>
 

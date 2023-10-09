@@ -312,6 +312,14 @@
                 Users
               </a>
             </li>
+            <li class="nav-item">
+              <a href="key-management.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'manage key' ? 'bg-dark text-light rounded-1' : ''; ?>">
+                <span class="me-2">
+                  <i class="bi bi-person-vcard"></i>
+                </span>
+                Manage Key
+              </a>
+            </li>
 
 
 
