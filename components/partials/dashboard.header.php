@@ -127,7 +127,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="keuangan_laporan.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'laporan keuangan' ? 'bg-dark text-light rounded-1' : ''; ?>">
+            <a href="laporan-keuangan.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'laporan keuangan' ? 'bg-dark text-light rounded-1' : ''; ?>">
               <span class="me-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" />

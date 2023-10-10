@@ -32,7 +32,7 @@ CREATE TABLE `activation_keys` (
   `user_id` int DEFAULT NULL,
   `activation_key` varchar(25) NOT NULL,
   `is_used` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ;
 
 --
 -- Dumping data untuk tabel `activation_keys`
@@ -93,7 +93,11 @@ CREATE TABLE `items` (
   `user_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `price` decimal(10,2) DEFAULT NULL
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `items`
@@ -133,7 +137,11 @@ CREATE TABLE `items_stock` (
   `item_id` int NOT NULL,
   `items_qty` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `items_stock`
@@ -158,7 +166,11 @@ CREATE TABLE `laporan_kasir` (
   `item_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `harga` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 -- --------------------------------------------------------
 
@@ -171,7 +183,11 @@ CREATE TABLE `laporan_keuangan` (
   `user_id` int NOT NULL,
   `total_harga` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 -- --------------------------------------------------------
 
@@ -185,7 +201,11 @@ CREATE TABLE `login_attempts` (
   `ip_address` varchar(255) NOT NULL,
   `success` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `login_attempts`
@@ -262,7 +282,11 @@ CREATE TABLE `menu` (
   `nama` varchar(255) NOT NULL,
   `harga` decimal(10,2) NOT NULL,
   `user_id` int DEFAULT NULL
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `menu`
@@ -282,7 +306,11 @@ CREATE TABLE `riwayat_order` (
   `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int NOT NULL
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `riwayat_order`
@@ -329,7 +357,11 @@ CREATE TABLE `riwayat_penjualan` (
   `quantity` int NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `riwayat_penjualan`
@@ -356,7 +388,11 @@ CREATE TABLE `users` (
   `subs_expiry` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `is_paid` tinyint(1) DEFAULT '0'
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `users`
@@ -403,7 +439,11 @@ CREATE TABLE `users_preferences` (
   `store_name` varchar(255) DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL
+<<<<<<< HEAD
+) ;
+=======
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- Dumping data untuk tabel `users_preferences`
@@ -549,7 +589,11 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT untuk tabel `riwayat_order`
 --
 ALTER TABLE `riwayat_order`
+<<<<<<< HEAD
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+=======
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
+>>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
 
 --
 -- AUTO_INCREMENT untuk tabel `riwayat_pembelian`
