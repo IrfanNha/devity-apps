@@ -123,10 +123,14 @@ $pages = 'Menu';
                     </table>
                 </div>
                 <div class="modal-footer">
+                    <!-- Button to reset the cart -->
                     <button type="button" class="btn btn-danger" id="resetKeranjang">Reset</button>
-                    <button type="button" class="btn btn-success" onclick="cetakStruk()">Cetak Struk</button>
+                    <!-- Button to print the receipt -->
+                    <button type="button" class="btn btn-success" id="cetakStrukBtn">Cetak Struk</button>
+                    <!-- Button to save the order -->
                     <button type="button" class="btn btn-primary" id="simpanBtn">Simpan</button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -151,6 +155,29 @@ $pages = 'Menu';
         </div>
     </div>
 </div>
+<?php
+$database = new Database();
+$conn = $database->getConnection();
+
+$user_id = $_SESSION['user_id'];
+$query = "SELECT * FROM users_preferences WHERE user_id = :user_id";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+
+if ($stmt->rowCount() > 0) {
+    // User has existing preferences, display them for editing
+    $preferences = $stmt->fetch(PDO::FETCH_ASSOC);
+} else {
+    // User doesn't have preferences, display an empty form
+    $preferences = [
+        'image' => '',
+        'store_name' => '',
+        'alamat' => '',
+        'phone' => ''
+    ];
+}
+?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
@@ -158,6 +185,12 @@ $pages = 'Menu';
     let keranjang = [];
     let totalHarga = 0;
     let cartItemCount = 0; // Initialize cart item count
+
+    // Echo the PHP variables as JavaScript variables
+    let image = "<?php echo $preferences['image']; ?>";
+    let storeName = "<?php echo $preferences['store_name']; ?>";
+    let alamat = "<?php echo $preferences['alamat']; ?>";
+    let users = "<?php echo $_SESSION['username']; ?>";
 
     function tambahItem(nama, harga) {
         // Check if the item is already in the cart
@@ -283,6 +316,17 @@ $pages = 'Menu';
         simpanBtn(); // Memanggil fungsi simpanBtn saat tombol "Simpan" ditekan
     });
 
+    // Event listener for the "Cetak Struk" button inside the modal
+    document.getElementById("cetakStrukBtn").addEventListener("click", function() {
+        // Check if the cart is empty
+        if (keranjang.length > 0) {
+            cetakStruk(); // Call the cetakStruk function when the "Cetak Struk" button is clicked
+        } else {
+            alert("Keranjang masih kosong. Tambahkan item ke keranjang terlebih dahulu.");
+        }
+    });
+
+
     // Fungsi untuk mengepost Data
     function simpanBtn() {
         // Check if the cart is empty before saving
@@ -351,6 +395,10 @@ $pages = 'Menu';
         const totalHarga = $('#totalHarga').text().replace('Rp. ', '');
         const cashAmount = $('#cashAmount').val(); // Retrieve cash amount from the input field
 
+        const image = "<?php echo $preferences['image']; ?>";
+        const storeName = "<?php echo $preferences['store_name']; ?>";
+        const alamat = "<?php echo $preferences['alamat']; ?>";
+        const users = "<?php echo $_SESSION['username']; ?>";
         // Isi struk yang akan dicetak
         var strukHTML = `
         <html>
@@ -397,14 +445,14 @@ $pages = 'Menu';
 <body>
     <div class="container mt-2">
         <div class="store-details">
-            <img src="path/to/store/logo.png" alt="Store Logo" class="store-logo">
-            <h2>Nama Warung</h2>
-            <p>Alamat Warung, Kota</p>
+            <img src="${image}" alt="Store Logo" class="store-logo">
+            <h2>${storeName}</h2>
+            <p>${alamat}</p>
         </div>
         <h2 class="mb-3 receipt-header">Struk Pesanan</h2>
         <p>Urutan Struk: #12345</p>
         <p>Tanggal Struk Cetak: ${getFormattedDate()}</p>
-        <p>Nama Pengguna Kasir: John Doe</p>
+        <p>Nama Pengguna Kasir: ${users}</p>
         <div class="table-responsive"> <!-- Make the table responsive -->
             <table class="table table-bordered text-center"> <!-- Center the content in the table -->
                 <thead>

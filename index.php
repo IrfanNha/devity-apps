@@ -83,7 +83,7 @@ $totalStock = $resultTotalStock['totalStock'];
       <h4 class="alert-heading">Selamat Datang <?= $_SESSION['username']; ?></h4>
       <p>Selesaikan setup toko anda, dengan konfigurasi toko di halaman <strong><a href="preferences.php" class="text-decoration-none">profil toko</a></strong> lalu tambahkan items anda di <strong><a href="items.php" class="text-decoration-none">items</a></strong></p>
       <hr>
-      <p class="mb-0">Untuk selengkapnya dapa anda baca di <strong><a href="docs.php" class="text-decoration-none">Dokumentasi</a></strong>. selamat menggunakan aplikasi kami</p>
+      <p class="mb-0">Untuk selengkapnya dapat anda baca di <strong><a href="#" class="text-decoration-none">Dokumentasi</a></strong>. selamat menggunakan aplikasi kami</p>
     </div>
     <?php
     if (!isset($preferences['store_name'])) { ?>
@@ -155,7 +155,7 @@ $totalStock = $resultTotalStock['totalStock'];
       <div class="col">
         <div class="card ">
           <div class="card-header">
-            <p>Stock masuk :</p>
+            <p>Stock Masuk :</p>
           </div>
           <div class="card-body ">
             <div>

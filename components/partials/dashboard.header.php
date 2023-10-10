@@ -73,7 +73,7 @@
               Dashboard
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="kasir.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'kasir' ? 'bg-dark text-light rounded-1' : ''; ?>">
               <span class="me-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
@@ -82,7 +82,7 @@
               </span>
               Kasir
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="menu.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'menu' ? 'bg-dark text-light rounded-1' : ''; ?>">
               <span class="me-2">
@@ -174,7 +174,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="docs.php" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'dokumentasi' ? 'bg-dark text-light rounded-1' : ''; ?>">
+              <a href="#" class="nav-link mx-2  <?php echo isset($pages) && strtolower($pages) === 'dokumentasi' ? 'bg-dark text-light rounded-1' : ''; ?>">
                 <span class="me-2">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-minus" viewBox="0 0 16 16">
                     <path d="M5.5 9a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5z" />
