@@ -6,17 +6,29 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-
 $pages = 'Riwayat';
 
-?>
+// Include necessary files
+require 'vendor/autoload.php';
+require 'config/Config.php';
+require 'config/Database.php';
+include 'components/templates/header.php';
+include 'components/partials/dashboard.header.php';
 
-<?php require 'vendor/autoload.php'; ?>
-<?php require 'config/Config.php'; ?>
-<?php require 'config/Database.php'; ?>
-<?php include 'components/templates/header.php' ?>
-<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-<?php include 'components/partials/dashboard.header.php' ?>
+// Establish a database connection
+$db = new Database();
+$conn = $db->getConnection();
+
+// Check if the connection was successful
+if (!$conn) {
+    die("Database connection failed: " . $db->getError());
+}
+
+// Execute SQL query to retrieve data
+$query = "SELECT * FROM `riwayat_pembelian`";
+$result = $conn->query($query);
+
+?>
 
 <!-- Content -->
 <div id="layoutSidenav_content">
@@ -39,32 +51,26 @@ $pages = 'Riwayat';
                     <table class="table table-hover" id="datatablesSimple">
                         <thead>
                             <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">
-                                    <center>Item</center>
-                                </th>
-                                <th scope="col">
-                                    <center>Total Harga</center>
-                                </th>
-                                <th scope="col">
-                                    <center>Waktu</center>
-                                </th>
-                                <th scope="col">
-                                    <center>Operasi</center>
-                                </th>
-
+                                <th scope="col">#</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Total Harga</th>
+                                <th scope="col">Waktu</th>
                             </tr>
                         </thead>
                         <tbody>
-
-
-
-
-                            <tr>
-
-                            </tr>
-
-
+                            <?php
+                            // Iterate through the results and display them in the table
+                            $count = 1;
+                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<th scope='row'>$count</th>";
+                                echo "<td>{$row['item_name']}</td>";
+                                echo "<td>Rp " . number_format($row['total_price'], 2) . "</td>"; // Format total_price as currency
+                                echo "<td>{$row['tgl_pembayaran']}</td>";
+                                echo "</tr>";
+                                $count++;
+                            }
+                            ?>
                         </tbody>
                     </table>
 
@@ -72,14 +78,12 @@ $pages = 'Riwayat';
             </div>
         </div>
     </main>
-
-    
 </div>
 
-
-
-
-
 <!-- Content -->
-<?php include 'components/partials/dashboard.footer.php' ?>
-<?php include 'components/templates/footer.php' ?>
+<?php
+// No need to close the PDO connection here
+
+include 'components/partials/dashboard.footer.php';
+include 'components/templates/footer.php';
+?>

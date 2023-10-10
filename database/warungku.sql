@@ -2,17 +2,10 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
-<<<<<<< HEAD
 -- Host: localhost:3306
 -- Waktu pembuatan: 09 Okt 2023 pada 14.59
 -- Versi server: 8.0.30
 -- Versi PHP: 7.4.33
-=======
--- Host: 127.0.0.1
--- Generation Time: Oct 09, 2023 at 04:23 PM
--- Server version: 10.4.22-MariaDB
--- PHP Version: 8.1.2
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,7 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
-<<<<<<< HEAD
 -- Struktur dari tabel `activation_keys`
 --
 
@@ -40,7 +32,7 @@ CREATE TABLE `activation_keys` (
   `user_id` int DEFAULT NULL,
   `activation_key` varchar(25) NOT NULL,
   `is_used` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ;
 
 --
 -- Dumping data untuk tabel `activation_keys`
@@ -62,9 +54,6 @@ INSERT INTO `activation_keys` (`id`, `user_id`, `activation_key`, `is_used`) VAL
 
 --
 -- Struktur dari tabel `items`
-=======
--- Table structure for table `items`
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
 --
 
 CREATE TABLE `items` (
@@ -74,11 +63,7 @@ CREATE TABLE `items` (
   `user_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `price` decimal(10,2) DEFAULT NULL
-<<<<<<< HEAD
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `items`
@@ -112,21 +97,12 @@ DELIMITER ;
 --
 
 CREATE TABLE `items_stock` (
-<<<<<<< HEAD
   `id` int NOT NULL,
   `user_id` int NOT NULL,
   `item_id` int NOT NULL,
   `items_qty` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `item_id` int(11) NOT NULL,
-  `items_qty` int(11) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `items_stock`
@@ -147,13 +123,8 @@ CREATE TABLE `laporan_kasir` (
   `laporan_keuangan_id` int(11) NOT NULL,
   `item_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `harga` decimal(10,2) NOT NULL,
-<<<<<<< HEAD
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-  `created_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 -- --------------------------------------------------------
 
@@ -165,13 +136,8 @@ CREATE TABLE `laporan_keuangan` (
   `laporan_keuangan_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `total_harga` decimal(10,2) NOT NULL,
-<<<<<<< HEAD
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-  `created_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 -- --------------------------------------------------------
 
@@ -183,15 +149,9 @@ CREATE TABLE `login_attempts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `ip_address` varchar(255) NOT NULL,
-<<<<<<< HEAD
   `success` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-  `success` tinyint(1) DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `login_attempts`
@@ -270,13 +230,8 @@ CREATE TABLE `menu` (
   `id` int(11) NOT NULL,
   `nama` varchar(255) NOT NULL,
   `harga` decimal(10,2) NOT NULL,
-<<<<<<< HEAD
   `user_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-  `user_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `menu`
@@ -365,15 +320,9 @@ INSERT INTO `order_items` (`id`, `order_id`, `item_name`, `item_price`, `quantit
 CREATE TABLE `riwayat_order` (
   `id` int(11) NOT NULL,
   `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-<<<<<<< HEAD
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `riwayat_order`
@@ -390,7 +339,6 @@ INSERT INTO `riwayat_order` (`id`, `data`, `created_at`, `user_id`) VALUES
 -- Table structure for table `riwayat_pembelian`
 --
 
-<<<<<<< HEAD
 CREATE TABLE `riwayat_penjualan` (
   `id` int NOT NULL,
   `user_id` int NOT NULL,
@@ -398,18 +346,7 @@ CREATE TABLE `riwayat_penjualan` (
   `quantity` int NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-CREATE TABLE `riwayat_pembelian` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `item_name` varchar(255) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
-  `total_price` decimal(10,2) DEFAULT NULL,
-  `order_id` int(11) DEFAULT NULL,
-  `tgl_pembayaran` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `riwayat_pembelian`
@@ -460,15 +397,9 @@ CREATE TABLE `users` (
   `is_active` tinyint(1) NOT NULL DEFAULT 0,
   `payment_key` varchar(255) DEFAULT NULL,
   `subs_expiry` date DEFAULT NULL,
-<<<<<<< HEAD
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `is_paid` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `is_paid` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `users`
@@ -514,11 +445,7 @@ CREATE TABLE `users_preferences` (
   `store_name` varchar(255) DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL
-<<<<<<< HEAD
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
+) ;
 
 --
 -- Dumping data for table `users_preferences`
@@ -534,7 +461,6 @@ INSERT INTO `users_preferences` (`id`, `user_id`, `image`, `store_name`, `alamat
 --
 
 --
-<<<<<<< HEAD
 -- Indeks untuk tabel `activation_keys`
 --
 ALTER TABLE `activation_keys`
@@ -543,9 +469,6 @@ ALTER TABLE `activation_keys`
 
 --
 -- Indeks untuk tabel `items`
-=======
--- Indexes for table `items`
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
 --
 ALTER TABLE `items`
   ADD PRIMARY KEY (`id`),
@@ -639,7 +562,6 @@ ALTER TABLE `users_preferences`
 --
 
 --
-<<<<<<< HEAD
 -- AUTO_INCREMENT untuk tabel `activation_keys`
 --
 ALTER TABLE `activation_keys`
@@ -647,9 +569,6 @@ ALTER TABLE `activation_keys`
 
 --
 -- AUTO_INCREMENT untuk tabel `items`
-=======
--- AUTO_INCREMENT for table `items`
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
 --
 ALTER TABLE `items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
@@ -700,11 +619,7 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `riwayat_order`
 --
 ALTER TABLE `riwayat_order`
-<<<<<<< HEAD
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-=======
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
->>>>>>> d46c317cccd7536bc9665d23f7c95ff0410bb5c0
 
 --
 -- AUTO_INCREMENT for table `riwayat_pembelian`
