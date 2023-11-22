@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Check if user_rank is not 3
-if ($_SESSION['user_rank'] !== "3") {
+if ($_SESSION['user_rank'] !== 3) {
   header("Location: 403.php");
   exit;
 }

@@ -84,39 +84,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (password_verify($password, $user['password'])) {
       // Password is correct, proceed with data deletion
 
-      // Delete menu data
+      // Delete data in Laporan Keuangan
+      $delete_laporan_keuangan_query = "DELETE FROM riwayat_pembelian WHERE user_id = :user_id";
+      $stmt = $conn->prepare($delete_laporan_keuangan_query);
+      $stmt->bindParam(':user_id', $user_id);
+      if ($stmt->execute()) {
+        $_SESSION['success_message'] = "Data in Laporan Keuangan berhasil dihapus.";
+      } else {
+        $_SESSION['error_message'] = "Terjadi kesalahaan ketika menghapus data di Laporan Keuangan.";
+      }
+
+      // Delete data in Laporan Menu
+      $delete_laporan_menu_query = "DELETE FROM order_items WHERE user_id = :user_id";
+      $stmt = $conn->prepare($delete_laporan_menu_query);
+      $stmt->bindParam(':user_id', $user_id);
+      if ($stmt->execute()) {
+        $_SESSION['success_message'] = "Data in Laporan Menu berhasil dihapus.";
+      } else {
+        $_SESSION['error_message'] = "Terjadi kesalahan ketika menghapus data di Laporan Menu.";
+      } 
+        
       $delete_menu_query = "DELETE FROM menu WHERE user_id = :user_id";
       $stmt = $conn->prepare($delete_menu_query);
       $stmt->bindParam(':user_id', $user_id);
       if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Semua berhasil dihapus.";
+        $_SESSION['success_message'] = "Data Menu berhasil dihapus.";
       } else {
-        $_SESSION['error_message'] = "Terjadi kesalahan ketika menghapus data.";
-      }
+        $_SESSION['error_message'] = "Terjadi kesalahan ketika menghapus data di Menu.";
+      } 
 
-      // Delete items_stock data
-      $delete_items_stock_query = "DELETE FROM items_stock WHERE user_id = :user_id";
-      $stmt = $conn->prepare($delete_items_stock_query);
+      $delete_order_items_query = "DELETE FROM order_items WHERE user_id = :user_id";
+      $stmt = $conn->prepare($delete_order_items_query);
       $stmt->bindParam(':user_id', $user_id);
       if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Semua berhasil dihapus.";
+        $_SESSION['success_message'] = "Data Menu berhasil dihapus.";
       } else {
-        $_SESSION['error_message'] = "Terjadi kesalahan ketika menghapus data.";
-      }
-      // Delete items data
-      $delete_items_query = "DELETE FROM items WHERE user_id = :user_id";
-      $stmt = $conn->prepare($delete_items_query);
-      $stmt->bindParam(':user_id', $user_id);
-      if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Semua Data berhasil dihapus.";
-      } else {
-        $_SESSION['error_message'] = "Terjadi kesalahan ketika menghapus data.";
-      }
+        $_SESSION['error_message'] = "Terjadi kesalahan ketika menghapus data di Menu.";
+      } 
 
+      // // Delete data in Laporan Modal
+      // $delete_laporan_modal_query = "DELETE FROM laporan_modal WHERE user_id = :user_id";
+      // $stmt = $conn->prepare($delete_laporan_modal_query);
+      // $stmt->bindParam(':user_id', $user_id);
+      // if ($stmt->execute()) {
+      //   $_SESSION['success_message'] = "Data in Laporan Modal berhasil dihapus.";
+      // } else {
+      //   $_SESSION['error_message'] = "Terjadi kesalahan ketika menghapus data di Laporan Modal.";
+      // }
 
       // Redirect the user back to the preferences page
       echo '<script>window.location.href = "preferences.php";</script>';
-
       exit();
     } else {
       // Password is incorrect, show an error message

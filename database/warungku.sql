@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Waktu pembuatan: 10 Okt 2023 pada 00.18
--- Versi server: 8.0.30
--- Versi PHP: 7.4.33
+-- Host: 127.0.0.1
+-- Generation Time: Nov 22, 2023 at 04:19 AM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,18 +24,18 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `activation_keys`
+-- Table structure for table `activation_keys`
 --
 
 CREATE TABLE `activation_keys` (
-  `id` int NOT NULL,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `activation_key` varchar(25) NOT NULL,
-  `is_used` tinyint(1) NOT NULL DEFAULT '0'
-) ;
+  `is_used` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `activation_keys`
+-- Dumping data for table `activation_keys`
 --
 
 INSERT INTO `activation_keys` (`id`, `user_id`, `activation_key`, `is_used`) VALUES
@@ -44,7 +44,6 @@ INSERT INTO `activation_keys` (`id`, `user_id`, `activation_key`, `is_used`) VAL
 (3, 8, 'NZ5GLSQFTGK2EIU78M130C6ZS', 1),
 (4, 10, 'FNAGIF7DXJRQA81BNRPR7EUKG', 1),
 (5, 11, 'YANRKQ5R23IOJKOVVHY41O4P2', 1),
-(6, NULL, 'K29UAR7P84QH92GHB0ERF1MEK', 0),
 (7, NULL, 'SDMZU2GL6IZE01273RZNKK5JU', 0),
 (8, NULL, '70R7VDKD7E2K4TX90NYPULWPO', 0),
 (9, NULL, 'D25U478SXCIRGBI9YTKKHM7XP', 0),
@@ -83,32 +82,27 @@ INSERT INTO `activation_keys` (`id`, `user_id`, `activation_key`, `is_used`) VAL
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `items`
+-- Table structure for table `items`
 --
 
 CREATE TABLE `items` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `item_name` varchar(255) NOT NULL,
   `item_code` varchar(255) NOT NULL,
-  `user_id` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
   `price` decimal(10,2) DEFAULT NULL
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `items`
+-- Dumping data for table `items`
 --
 
 INSERT INTO `items` (`id`, `item_name`, `item_code`, `user_id`, `created_at`, `price`) VALUES
-(31, 'susu kental manis', 'SUS9083224', 1, '2023-10-03 12:06:02', 10000.00),
-(32, 'gula pasir', 'GUL6291430', 1, '2023-10-09 16:07:14', 10000.00);
+(36, 'Kecap', 'KEC9163415', 1, '2023-10-17 05:01:58', '12000.00');
 
 --
--- Trigger `items`
+-- Triggers `items`
 --
 DELIMITER $$
 CREATE TRIGGER `after_insert_item` AFTER INSERT ON `items` FOR EACH ROW BEGIN
@@ -128,87 +122,70 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `items_stock`
+-- Table structure for table `items_stock`
 --
 
 CREATE TABLE `items_stock` (
-  `id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `item_id` int NOT NULL,
-  `items_qty` int NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `items_qty` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `items_stock`
+-- Dumping data for table `items_stock`
 --
 
 INSERT INTO `items_stock` (`id`, `user_id`, `item_id`, `items_qty`, `created_at`) VALUES
-(96, 1, 31, 0, '2023-10-03 12:06:02'),
-(97, 1, 31, 0, '2023-10-03 12:06:02'),
-(98, 1, 31, 12, '2023-10-04 13:58:20'),
-(99, 1, 32, 0, '2023-10-09 16:07:14'),
-(100, 1, 32, 0, '2023-10-09 16:07:14');
+(112, 1, 36, 0, '2023-10-17 05:01:58'),
+(113, 1, 36, 0, '2023-10-17 05:01:58'),
+(114, 1, 36, 5, '2023-10-17 05:02:34'),
+(115, 1, 36, -3, '2023-10-17 05:02:57');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `laporan_kasir`
+-- Table structure for table `laporan_kasir`
 --
 
 CREATE TABLE `laporan_kasir` (
-  `laporan_kasir_id` int NOT NULL,
-  `laporan_keuangan_id` int NOT NULL,
-  `item_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `laporan_kasir_id` int(11) NOT NULL,
+  `laporan_keuangan_id` int(11) NOT NULL,
+  `item_details` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `harga` decimal(10,2) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `laporan_keuangan`
+-- Table structure for table `laporan_keuangan`
 --
 
 CREATE TABLE `laporan_keuangan` (
-  `laporan_keuangan_id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `laporan_keuangan_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `total_harga` decimal(10,2) NOT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `login_attempts`
+-- Table structure for table `login_attempts`
 --
 
 CREATE TABLE `login_attempts` (
-  `id` int NOT NULL,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `ip_address` varchar(255) NOT NULL,
-  `success` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `success` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `login_attempts`
+-- Dumping data for table `login_attempts`
 --
 
 INSERT INTO `login_attempts` (`id`, `user_id`, `ip_address`, `success`, `created_at`) VALUES
@@ -269,145 +246,195 @@ INSERT INTO `login_attempts` (`id`, `user_id`, `ip_address`, `success`, `created
 (55, 1, '114.10.18.162', 1, '2023-10-09 15:18:03'),
 (56, 1, '114.10.16.1', 1, '2023-10-09 23:44:32'),
 (57, 1, '114.10.16.1', 1, '2023-10-09 23:48:22'),
-(58, 1, '114.10.16.1', 1, '2023-10-10 00:15:25');
+(58, 1, '114.10.16.1', 1, '2023-10-10 00:15:25'),
+(59, 1, '182.2.68.183', 1, '2023-10-10 02:41:42'),
+(60, 1, '182.2.68.183', 1, '2023-10-10 02:42:13'),
+(61, 1, '114.10.11.185', 1, '2023-10-10 05:10:47'),
+(62, NULL, '114.10.11.185', 0, '2023-10-10 05:11:28'),
+(63, NULL, '114.10.11.185', 0, '2023-10-10 05:11:35'),
+(64, 1, '114.10.11.185', 1, '2023-10-10 05:11:49'),
+(65, 1, '114.10.11.185', 1, '2023-10-10 05:20:16'),
+(66, 1, '114.10.11.185', 1, '2023-10-10 05:21:06'),
+(67, 1, '202.80.217.120', 1, '2023-10-10 12:58:42'),
+(68, 1, '103.3.220.22', 1, '2023-10-11 14:19:32'),
+(69, 1, '::1', 1, '2023-10-17 04:05:47'),
+(70, 10, '::1', 1, '2023-10-17 04:07:58'),
+(71, 1, '::1', 1, '2023-10-17 04:11:43'),
+(72, 1, '114.10.11.11', 1, '2023-10-17 04:58:51'),
+(73, 1, '114.10.11.11', 1, '2023-10-17 04:59:59'),
+(74, 1, '114.10.11.11', 1, '2023-10-17 05:09:04'),
+(75, 1, '114.10.11.11', 1, '2023-10-17 05:11:14'),
+(76, 10, '114.10.11.11', 1, '2023-10-17 05:12:36');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `menu`
+-- Table structure for table `menu`
 --
 
 CREATE TABLE `menu` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `nama` varchar(255) NOT NULL,
   `harga` decimal(10,2) NOT NULL,
-  `user_id` int DEFAULT NULL
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `user_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `menu`
+-- Dumping data for table `menu`
 --
 
 INSERT INTO `menu` (`id`, `nama`, `harga`, `user_id`) VALUES
-(20, 'sego borok', 10000.00, 1);
+(28, 'Mie Goreng', '12000.00', 1);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `riwayat_order`
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `total_price`, `created_at`) VALUES
+(22, 1, '30000.00', '2023-10-11 14:17:03'),
+(23, 1, '70000.00', '2023-10-17 05:04:28'),
+(24, 1, '48000.00', '2023-10-17 05:07:36'),
+(25, 1, '36000.00', '2023-10-17 05:07:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `item_name` varchar(255) DEFAULT NULL,
+  `item_price` decimal(10,2) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `user_id`, `order_id`, `item_name`, `item_price`, `quantity`, `created_at`) VALUES
+(36, NULL, 22, 'Nasi Goreng', '10000.00', 3, '2023-10-11 14:17:03'),
+(37, NULL, 23, 'Bakso', '10000.00', 7, '2023-10-17 05:04:28'),
+(38, NULL, 24, 'Mie Goreng', '12000.00', 4, '2023-10-17 05:07:36'),
+(39, NULL, 25, 'Mie Goreng', '12000.00', 3, '2023-10-17 05:07:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `riwayat_order`
 --
 
 CREATE TABLE `riwayat_order` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_id` int NOT NULL
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `riwayat_order`
+-- Dumping data for table `riwayat_order`
 --
 
 INSERT INTO `riwayat_order` (`id`, `data`, `created_at`, `user_id`) VALUES
-(1, '{\"keranjang\":[{\"nama\":\"Menu1\",\"harga\":10,\"quantity\":2,\"subtotal\":20},{\"nama\":\"Menu2\",\"harga\":15,\"quantity\":1,\"subtotal\":15}],\"totalHarga\":35}', '2023-10-02 03:04:56', 1),
-(2, '{\"keranjang\":[{\"nama\":\"Menu3\",\"harga\":8,\"quantity\":3,\"subtotal\":24},{\"nama\":\"Menu1\",\"harga\":10,\"quantity\":1,\"subtotal\":10}],\"totalHarga\":34}', '2023-10-02 03:04:56', 2),
-(3, '{\"keranjang\":[{\"nama\":\"Menu2\",\"harga\":15,\"quantity\":2,\"subtotal\":30},{\"nama\":\"Menu3\",\"harga\":8,\"quantity\":2,\"subtotal\":16}],\"totalHarga\":46}', '2023-10-02 03:04:56', 1);
+(2, '{\"keranjang\":[{\"nama\":\"Menu3\",\"harga\":8,\"quantity\":3,\"subtotal\":24},{\"nama\":\"Menu1\",\"harga\":10,\"quantity\":1,\"subtotal\":10}],\"totalHarga\":34}', '2023-10-02 03:04:56', 2);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `riwayat_pembelian`
+-- Table structure for table `riwayat_pembelian`
 --
 
 CREATE TABLE `riwayat_pembelian` (
-  `id` int NOT NULL,
-  `user_id` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `item_name` varchar(255) DEFAULT NULL,
-  `quantity` int DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
   `total_price` decimal(10,2) DEFAULT NULL,
-  `order_id` int DEFAULT NULL,
-  `tgl_pembayaran` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `order_id` int(11) DEFAULT NULL,
+  `tgl_pembayaran` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `riwayat_pembelian`
+-- Dumping data for table `riwayat_pembelian`
 --
 
 INSERT INTO `riwayat_pembelian` (`id`, `user_id`, `item_name`, `quantity`, `total_price`, `order_id`, `tgl_pembayaran`) VALUES
-(21, 1, 'sego borok', 2, 20000.00, 0, '2023-10-10 00:09:08');
+(35, 1, 'Mie Goreng', 4, '48000.00', 24, '2023-10-17 05:07:36'),
+(36, 1, 'Mie Goreng', 3, '36000.00', 25, '2023-10-17 05:07:51');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `riwayat_penjualan`
+-- Table structure for table `riwayat_penjualan`
 --
 
 CREATE TABLE `riwayat_penjualan` (
-  `id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `item_name` varchar(255) NOT NULL,
-  `quantity` int NOT NULL,
+  `quantity` int(11) NOT NULL,
   `total` decimal(10,2) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `riwayat_penjualan`
+-- Dumping data for table `riwayat_penjualan`
 --
 
 INSERT INTO `riwayat_penjualan` (`id`, `user_id`, `item_name`, `quantity`, `total`, `created_at`) VALUES
-(1, 1, 'susu kental manis', 1, 10000.00, '2023-10-04 13:38:26');
+(1, 1, 'susu kental manis', 1, '10000.00', '2023-10-04 13:38:26');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `user_rank` int NOT NULL DEFAULT '1',
+  `user_rank` int(11) NOT NULL DEFAULT 1,
   `token` varchar(255) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT 0,
   `payment_key` varchar(255) DEFAULT NULL,
   `subs_expiry` date DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `is_paid` tinyint(1) DEFAULT '0'
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `is_paid` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `user_rank`, `token`, `is_active`, `payment_key`, `subs_expiry`, `created_at`, `is_paid`) VALUES
-(1, 'admin', 'mazirfan0099@gmail.com', '$2y$10$pJ3KTMKAUjVzzH9bk9Btf.YOukBS.HcpVxGmmYyY3rPh8O7WSx1Nu', 3, '232cdf91f965d69860bfb94754ebee20e5466b03a24c278185b08bdf90d50028', 1, NULL, NULL, '2023-09-05 02:02:00', 0),
-(3, 'ayis', 'akuntugas010102@gmail.com', '$2y$10$Q.2PgVTjQMqCcXL6dkWEneHZqiuDiHM.FNubpa06KF67xglHw7xRO', 2, '9a3ca592f4b8191491adcc610c53a70080925fddc81b4e43eb428b065453df27', 1, NULL, NULL, '2023-09-05 03:55:24', 0),
-(8, 'ini rasa', 'ini.r4sa@gmail.com', '$2y$10$yepQdf1LCAdVdKuW9W97nOOBbVCUcGnRw6cEehEKk1YJhi2PdHEA6', 1, '2a9861bce30393ae186de05df634d9d16a2754f45bf11d63d0281eea030798c2', 1, 'VZRVJQTIKSR6', '2023-11-11', '2023-09-11 03:47:10', 1),
+(1, 'admin', 'admin@admin.com', '$2y$10$pJ3KTMKAUjVzzH9bk9Btf.YOukBS.HcpVxGmmYyY3rPh8O7WSx1Nu', 3, '232cdf91f965d69860bfb94754ebee20e5466b03a24c278185b08bdf90d50028', 1, NULL, NULL, '2023-09-05 02:02:00', 0),
+(3, 'borok', 'akuntugas010102@gmail.com', '$2y$10$Q.2PgVTjQMqCcXL6dkWEneHZqiuDiHM.FNubpa06KF67xglHw7xRO', 2, '9a3ca592f4b8191491adcc610c53a70080925fddc81b4e43eb428b065453df27', 1, NULL, NULL, '2023-09-05 03:55:24', 0),
+(8, 'ini rasa', 'ini.r4sa@gmail.com', '$2y$10$yepQdf1LCAdVdKuW9W97nOOBbVCUcGnRw6cEehEKk1YJhi2PdHEA6', 1, '2a9861bce30393ae186de05df634d9d16a2754f45bf11d63d0281eea030798c2', 1, NULL, NULL, '2023-09-11 03:47:10', 0),
 (9, 'irfan', 'brokirgaa2@gmail.com', '$2y$10$Aguma0DP3JuO/08dK83EqOiECgQp8ztRiQSZp275UBWR3evziS5S6', 1, '16c32b11f49910cc3496c7f9c70f2819680e081ca5655cce752aaecf7e5568b1', 1, NULL, NULL, '2023-09-29 13:23:26', 0),
 (10, 'users', 'finnch77@gmail.com', '$2y$10$zx4YsUch3OPg.ALATe.y9u4IB2VyxSxP2FteNXeK6Tr3rgvvyi0ey', 1, '6c71a224b1119932762da6377a79a086ff078da46d7bdf6c758ab22ce5df8c67', 0, NULL, NULL, '2023-10-09 23:48:02', 0),
-(11, 'arifin', 'arifin.wahyuapril01@gmail.com', '$2y$10$ZYtVNm1LAgmxvPX316mIMOYnyXccBB3gJrLTrCsCujb6qhEnBNUPS', 1, 'd3c499683d32b25231623cae876660fb2c559dc1309acd4aa8bf7438cd1e6d44', 0, NULL, NULL, '2023-10-10 00:16:20', 0);
+(11, 'arifin', 'arifin.wahyuapril01@gmail.com', '$2y$10$ZYtVNm1LAgmxvPX316mIMOYnyXccBB3gJrLTrCsCujb6qhEnBNUPS', 1, 'd3c499683d32b25231623cae876660fb2c559dc1309acd4aa8bf7438cd1e6d44', 1, NULL, NULL, '2023-10-10 00:16:20', 0);
 
 --
--- Trigger `users`
+-- Triggers `users`
 --
 DELIMITER $$
 CREATE TRIGGER `delete_user_data` BEFORE DELETE ON `users` FOR EACH ROW BEGIN
@@ -429,42 +456,39 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users_preferences`
+-- Table structure for table `users_preferences`
 --
 
 CREATE TABLE `users_preferences` (
-  `id` int NOT NULL,
-  `user_id` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `store_name` varchar(255) DEFAULT NULL,
   `alamat` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL
-<<<<<<< HEAD
-) ;
-=======
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `users_preferences`
+-- Dumping data for table `users_preferences`
 --
 
 INSERT INTO `users_preferences` (`id`, `user_id`, `image`, `store_name`, `alamat`, `phone`) VALUES
-(1, 1, 'images/logo.jpg', 'bagong store', 'jl solok cilangkap', '121313131313131');
+(1, 1, 'images/WhatsApp Image 2023-05-03 at 10.44.13.jpg', 'E Warung', 'Jl. Ngawi timur', '081233676908'),
+(4, 10, 'images/JOHAN (2).jpg', 'E Warung', '', '');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `activation_keys`
+-- Indexes for table `activation_keys`
 --
 ALTER TABLE `activation_keys`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `activation_key` (`activation_key`);
 
 --
--- Indeks untuk tabel `items`
+-- Indexes for table `items`
 --
 ALTER TABLE `items`
   ADD PRIMARY KEY (`id`),
@@ -472,7 +496,7 @@ ALTER TABLE `items`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `items_stock`
+-- Indexes for table `items_stock`
 --
 ALTER TABLE `items_stock`
   ADD PRIMARY KEY (`id`),
@@ -480,40 +504,55 @@ ALTER TABLE `items_stock`
   ADD KEY `item_id` (`item_id`);
 
 --
--- Indeks untuk tabel `laporan_kasir`
+-- Indexes for table `laporan_kasir`
 --
 ALTER TABLE `laporan_kasir`
   ADD PRIMARY KEY (`laporan_kasir_id`),
   ADD KEY `laporan_keuangan_id` (`laporan_keuangan_id`);
 
 --
--- Indeks untuk tabel `laporan_keuangan`
+-- Indexes for table `laporan_keuangan`
 --
 ALTER TABLE `laporan_keuangan`
   ADD PRIMARY KEY (`laporan_keuangan_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `login_attempts`
+-- Indexes for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `menu`
+-- Indexes for table `menu`
 --
 ALTER TABLE `menu`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_user_menu` (`user_id`);
 
 --
--- Indeks untuk tabel `riwayat_order`
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`),
+  ADD KEY `order_items_ibfk_2` (`user_id`);
+
+--
+-- Indexes for table `riwayat_order`
 --
 ALTER TABLE `riwayat_order`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `riwayat_pembelian`
+-- Indexes for table `riwayat_pembelian`
 --
 ALTER TABLE `riwayat_pembelian`
   ADD PRIMARY KEY (`id`),
@@ -521,141 +560,162 @@ ALTER TABLE `riwayat_pembelian`
   ADD KEY `order_id` (`order_id`);
 
 --
--- Indeks untuk tabel `riwayat_penjualan`
+-- Indexes for table `riwayat_penjualan`
 --
 ALTER TABLE `riwayat_penjualan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `users_preferences`
+-- Indexes for table `users_preferences`
 --
 ALTER TABLE `users_preferences`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `activation_keys`
+-- AUTO_INCREMENT for table `activation_keys`
 --
 ALTER TABLE `activation_keys`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT untuk tabel `items`
+-- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
--- AUTO_INCREMENT untuk tabel `items_stock`
+-- AUTO_INCREMENT for table `items_stock`
 --
 ALTER TABLE `items_stock`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
--- AUTO_INCREMENT untuk tabel `laporan_kasir`
+-- AUTO_INCREMENT for table `laporan_kasir`
 --
 ALTER TABLE `laporan_kasir`
-  MODIFY `laporan_kasir_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `laporan_kasir_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `laporan_keuangan`
+-- AUTO_INCREMENT for table `laporan_keuangan`
 --
 ALTER TABLE `laporan_keuangan`
-  MODIFY `laporan_keuangan_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `laporan_keuangan_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `login_attempts`
+-- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
--- AUTO_INCREMENT untuk tabel `menu`
+-- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT untuk tabel `riwayat_order`
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
+--
+-- AUTO_INCREMENT for table `riwayat_order`
 --
 ALTER TABLE `riwayat_order`
-<<<<<<< HEAD
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-=======
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
->>>>>>> e01c485f11c5d4d0a47d087ca9491030e0269906
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `riwayat_pembelian`
+-- AUTO_INCREMENT for table `riwayat_pembelian`
 --
 ALTER TABLE `riwayat_pembelian`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
--- AUTO_INCREMENT untuk tabel `riwayat_penjualan`
+-- AUTO_INCREMENT for table `riwayat_penjualan`
 --
 ALTER TABLE `riwayat_penjualan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT untuk tabel `users_preferences`
+-- AUTO_INCREMENT for table `users_preferences`
 --
 ALTER TABLE `users_preferences`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `items`
+-- Constraints for table `items`
 --
 ALTER TABLE `items`
   ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `items_stock`
+-- Constraints for table `items_stock`
 --
 ALTER TABLE `items_stock`
   ADD CONSTRAINT `items_stock_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `items_stock_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `laporan_kasir`
+-- Constraints for table `laporan_kasir`
 --
 ALTER TABLE `laporan_kasir`
   ADD CONSTRAINT `laporan_kasir_ibfk_1` FOREIGN KEY (`laporan_keuangan_id`) REFERENCES `laporan_keuangan` (`laporan_keuangan_id`);
 
 --
--- Ketidakleluasaan untuk tabel `laporan_keuangan`
+-- Constraints for table `laporan_keuangan`
 --
 ALTER TABLE `laporan_keuangan`
   ADD CONSTRAINT `laporan_keuangan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `menu`
+-- Constraints for table `menu`
 --
 ALTER TABLE `menu`
   ADD CONSTRAINT `fk_user_menu` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Ketidakleluasaan untuk tabel `users_preferences`
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users_preferences` (`user_id`);
+
+--
+-- Constraints for table `users_preferences`
 --
 ALTER TABLE `users_preferences`
   ADD CONSTRAINT `users_preferences_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);

@@ -94,7 +94,10 @@ $totalStock = $resultTotalStock['totalStock'];
     <?php } ?>
 
     <div class="d-flex justify-content-between align-items-center">
+    
+      <img class="mb-3" src="<?php echo $preferences['image']; ?>" alt="" height="50vh">
       <h2><?= isset($preferences['store_name']) ? $preferences['store_name'] : 'belum diberi nama' ?></h2>
+    
       <a href="preferences.php" class="btn btn-dark rounded-pill px-4">Edit</a>
     </div>
     <hr>

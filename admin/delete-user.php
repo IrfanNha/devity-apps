@@ -2,7 +2,7 @@
 session_start();
 
 // Pastikan pengguna yang mencoba mengakses halaman ini adalah admin atau super admin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_rank'] < 2) {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_rank'] < 3) {
   header("Location: 403.php");
   exit;
 }
